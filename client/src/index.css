@@ -4,12 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(128, 3, 3, 0.87);
+  color: black;
   background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
 
   overflow-y: hidden;
   -webkit-scrollbar {
