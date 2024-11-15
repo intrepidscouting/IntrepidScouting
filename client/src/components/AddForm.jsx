@@ -234,8 +234,8 @@ const AddForm = ({scoutName}) => {
             </select>
             <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
             <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
-            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach name" required/>
-            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
+            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Agent" required/>
+            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Agent Tel:" required/>
             <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
               <option value="">-- Select Status --</option>
               <option value="Signed" defaultValue>Signed</option>
