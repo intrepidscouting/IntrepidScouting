@@ -80,28 +80,28 @@ const ExportStyledPDF = ({player, evaluation}) => {
 
       // Loop through each key-value pair in the JSON object
       Object.keys(evaluation).forEach(key => {
-      // Skip the fields you want to exclude (like the email)
-      if (key === 'title' || key === 'email') return;
+        // Skip the fields you want to exclude (like the email)
+        if (key === 'title' || key === 'email') return;
 
-      // Add the section key as a heading
-      doc.setFontSize(14);
-      doc.setTextColor(40);
-      doc.text(key.charAt(0).toUpperCase() + key.slice(1), margin, yCoordinate);
-      yCoordinate += lineHeight;
+        // Add the section key as a heading
+        doc.setFontSize(14);
+        doc.setTextColor(40);
+        doc.text(key.charAt(0).toUpperCase() + key.slice(1), margin, yCoordinate);
+        yCoordinate += 8;
 
-      // Add the content of the section
-      doc.setFontSize(12);
-      const textWidth = 180; // Maximum width for text wrapping
-      const splitContent = doc.splitTextToSize(evaluation[key], textWidth);
-      doc.text(splitContent, margin, yCoordinate);
-      yCoordinate += splitContent.length * lineHeight + 5;
+        // Add the content of the section
+        doc.setFontSize(12);
+        const textWidth = 180; // Maximum width for text wrapping
+        const splitContent = doc.splitTextToSize(evaluation[key], textWidth);
+        doc.text(splitContent, margin, yCoordinate);
+        yCoordinate += splitContent.length * 6 + 4;
 
-      // Check if the content would overflow the page
-      if (yCoordinate + lineHeight > 280) {
-        doc.addPage();
-        yCoordinate = 20; // Reset y-coordinate for the new page
-      }
-    });
+        // Check if the content would overflow the page
+        if (yCoordinate + lineHeight > 280) {
+          doc.addPage();
+          yCoordinate = 20; // Reset y-coordinate for the new page
+        }
+      });
   
       
   

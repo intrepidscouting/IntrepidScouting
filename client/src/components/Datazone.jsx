@@ -196,6 +196,7 @@ const Datazone = ({scoutName}) => {
         event.stopPropagation(); // Prevents the row click event
         try {
           const data = await apiService.delete(`/players/delete/${pid}`);
+          const evaDel = await apiService.delete(`/evaluation/delete/${pid}`);
           fetchPlayers();
         } catch (e) {
           setErr("Failed to delete player: " + e);

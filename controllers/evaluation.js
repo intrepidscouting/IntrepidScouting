@@ -35,9 +35,10 @@ const getEvaluation = async (req,res) => {
 }
 
 const deleteEvaluation = async (req, res) => {
+     const db_connect = dbo.getDb()
     try{
-         const {id} = req.params
-         const evaluation = await db_connect.collection("evaluation").deleteOne(id)
+         const {Player_id} = req.params
+         const evaluation = await db_connect.collection("evaluation").deleteOne({ Player_id: Player_id})
          if (!evaluation) {
               return res.status(404).json({message: "cannot find any player with ID ${id}"})
          }

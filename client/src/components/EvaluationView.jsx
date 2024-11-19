@@ -70,7 +70,7 @@ const EvaluationView = ({player}) => {
                 </div>
                 <div className="personal_detail">
                     <span>Height: </span>
-                    <p>{player.Height}</p>
+                    <p>{player.Height== "" ? "N/A" : `${player.Height} cm`}</p>
                 </div>
                 <div className="personal_detail">
                     <span>Position: </span>

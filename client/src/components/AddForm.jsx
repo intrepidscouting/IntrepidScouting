@@ -204,7 +204,7 @@ const AddForm = ({scoutName}) => {
               <option value="Female">Female</option>
             </select>
             <input type="date" name='dob' value={playerData.dob} onChange={handleInputChange} placeholder="Date of birth" required/>
-            <input type="text" name='height' value={playerData.height} onChange={handleInputChange} placeholder="Height in cm"/>
+            <input type="text" name='height' value={playerData.height} onChange={handleInputChange} placeholder="Height in cm" defaultValue={"N/A"}/>
 
             <select  name="nationality" id="nationality" value={playerData.nationality} onChange={handleInputChange}>
             <option value="">--Select Nationality --</option>

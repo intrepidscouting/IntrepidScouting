@@ -5,8 +5,7 @@ const { getEvaluation, createEvaluation, updateEvaluation, deleteEvaluation } = 
 
 router.route("/:Player_id").get(getEvaluation);
 router.route("/").post(createEvaluation);
-router.route("/:id").delete( deleteEvaluation)
-
+router.route("/delete/:Player_id").delete(deleteEvaluation);
 
 
 module.exports = router
