@@ -1,7 +1,12 @@
 import axios from "axios";
 
+
+// const apiUrl = import.meta.env.VITE_REACT_HOSTNAME;
+const apiUrl = "http://localhost:3000";
+
+
 // Base URL for your backend API 
-const API_BASE_URL = "https://intrepidscouting.onrender.com";
+const API_BASE_URL = apiUrl;
 
 // Helper function to make API requests
 const apiRequest = async (method, endpoint, data = null, headers = {}) => {
