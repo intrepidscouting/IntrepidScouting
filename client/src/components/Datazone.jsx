@@ -19,6 +19,7 @@ const Datazone = ({scoutName}) => {
   const [searchValue, setSearchValue] = useState('');
   const [err, setErr] = useState('');
   const [dobFilter, setDobFilter]= useState({start: '', end: ''});
+  const [hoveredClass, setHoveredClass] = useState('');
 
   //Fetch all players from the database      
   const fetchPlayers = async () => {
@@ -101,7 +102,7 @@ const Datazone = ({scoutName}) => {
     
         const filteredResults = players.filter((person) =>
           Object.values(person).some((field) =>
-            String(field).toLowerCase().includes(value)
+            String(field).toLowerCase().includes(value.toLowerCase())
           )
         );
     
@@ -200,6 +201,34 @@ const Datazone = ({scoutName}) => {
           setErr("Failed to delete player: " + e);
           console.log(err);
         }
+      };
+
+      const positionMap = [
+        {"full": "Goalkeeper", "short": "GK"},
+        {"full": "Center Back", "short": "CB"},
+        {"full": "Left Back", "short": "LB"},
+        {"full": "Right Back", "short": "RB"},
+        {"full": "Defender Midfielder", "short": "DM"},
+        {"full": "Central Midfielder", "short": "CM"},
+        {"full": "Central Attacking Midfielder", "short": "CAM"},
+        {"full": "Left Winger", "short": "LW"},
+        {"full": "Right Winger", "short": "RW"},
+        {"full": "Center Foward", "short": "CF"},
+      ];
+
+      const positionMapping = (positionMap, data) => {
+        const shortform = positionMap.find((position) => position.full === data);
+        return shortform.short;
+      }
+
+      // Function to handle mouse enter
+      const handleMouseEnter = (className) => {
+        setHoveredClass(className);
+      };
+
+      // Function to handle mouse leave
+      const handleMouseLeave = () => {
+        setHoveredClass('');
       };
 
   return (
@@ -312,11 +341,19 @@ const Datazone = ({scoutName}) => {
             </td>
             <td>{formatDate(player.Date_of_Birth)}</td>
             
-            <td>{player.Position}</td>
+            <td>{positionMapping(positionMap,player.Position)}</td>
             <td>{player.Preferred_Foot}</td>
             <td>{player.Scouted_By}</td>
-            <td className={`status`}>
-              <div className={`${player.Status.toLowerCase()}`}></div>
+            <td className={`status`}
+              onMouseEnter={() => handleMouseEnter(`${player.Status.toLowerCase()}`)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div className='tooltip'>
+                <div className={`${player.Status.toLowerCase()}`}></div>
+                <span class="tooltiptext">{`${player.Status}`}</span>
+              </div>
+              
+              
             </td>
             <td className='trash-td'  onClick={(event) => deletePlayer(event, player._id)}>
               <div className='trash-icon'>
@@ -328,21 +365,17 @@ const Datazone = ({scoutName}) => {
                 <FontAwesomeIcon icon={faPencil}/>
               </div>
             </td>
+            
           </tr>
+          
         ))}
       </tbody>
       </table>
       </div>
-    
   </div>
   </>
   )
 }
-
-
-
-
-
 
 
 

@@ -41,7 +41,7 @@ const EvaluationView = ({player}) => {
                         <div key={key} className="noteView">
                             <span>{header}</span>
                             <div className="noteValue">
-                                <p>{value}</p>
+                                {value}
                             </div>
                         </div>
                     ); 
@@ -69,6 +69,10 @@ const EvaluationView = ({player}) => {
                     <p>{player.Preferred_Foot}</p>
                 </div>
                 <div className="personal_detail">
+                    <span>Height: </span>
+                    <p>{player.Height}</p>
+                </div>
+                <div className="personal_detail">
                     <span>Position: </span>
                     <p>{player.Position}</p>
                 </div>
@@ -94,7 +98,7 @@ const EvaluationView = ({player}) => {
                 </div>
                 <div className="personal_detail">
                     <span>Conatct Coach: </span>
-                    <p>{"(+233)" + player.Number_of_coach}</p>
+                    <p>{player.Number_of_coach}</p>
                 </div>
             <ExportStyledPDF player={player} evaluation={ratings}/>    
             </div>

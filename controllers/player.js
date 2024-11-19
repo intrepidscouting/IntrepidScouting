@@ -1,7 +1,7 @@
 
 const PlayerModel = require("../models/players")
 const path = require('path')
-require('dotenv').config();
+require('dotenv').config()
 const dbo = require("../db/conn.js")
 const ObjectId = require("mongodb").ObjectId
 
@@ -9,15 +9,6 @@ const getPlayers = async (req,res) => {
     const db_connect = dbo.getDb()
     try{
         const players = await db_connect.collection("player").find({}).toArray()
-
-     //    const playersData = players.map(player => {
-     //        const playerData = player.toObject(); // Convert to plain object
-     //        if (playerData.Image && Buffer.isBuffer(playerData.Image)) {
-     //            playerData.Image = `data:image/jpeg;base64,${playerData.Image.toString('base64')}`;
-     //        }
-     //        return playerData;
-     //        });
-
         res.status(200).json(players);
     } catch(error){
         console.log(error.message)
@@ -28,7 +19,7 @@ const getPlayers = async (req,res) => {
 const createPlayers = async (req, res) => {
      const db_connect = dbo.getDb()
      try{
-          const { First_name, Last_name, Gender, Date_of_Birth,
+          const { First_name, Last_name, Gender, Date_of_Birth, Height,
                Position, Nationality, NationalityISO, Club,
                Preferred_Foot, Status, Coach, 
                Number_of_coach, Region_scouted_in, Scouted_By } = req.body;
@@ -40,10 +31,10 @@ const createPlayers = async (req, res) => {
 
           // Create a new image document
           const player = new PlayerModel({
-               First_name, Last_name, Gender, Date_of_Birth,
+               First_name, Last_name, Gender, Date_of_Birth, Height,
                Position, Nationality, NationalityISO, Club,
                Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By,
-               Image: `https://intrepidscouting.onrender.com/${req.file.path}`// store the image path
+               Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`// store the image path
           });
 
           await  db_connect.collection("player").insertOne(player) //req.body is request.body which means whatever the clients sends to the server must be shown in the console screen or browser
@@ -65,6 +56,7 @@ const updatePlayers = async (req, res) => {
                Gender: req.body.Gender,
                Date_of_Birth: req.body.Date_of_Birth,
                Position: req.body.Position,
+               Height: req.body.Height,
                Nationality: req.body.Nationality,
                NationalityISO: req.body.NationalityISO,
                Club: req.body.Club,

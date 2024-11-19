@@ -54,37 +54,56 @@ const ExportStyledPDF = ({player, evaluation}) => {
       doc.text(`Nationality: ${player.Nationality}`, 20, 110);
       doc.text(`Position: ${player.Position}`, 20, 120);
       doc.text(`Preferred Foot: ${player.Preferred_Foot}`, 20, 130);
+      doc.text(`Region_scouted_in: ${player.Region_scouted_in}`, 110, 140);
+
       doc.text(`Club: ${player.Club}`, 110, 90);
-      doc.text(`Region_scouted_in: ${player.Region_scouted_in}`, 110, 100);
+      doc.text(`Height: ${player.Height}`, 110, 100);
       doc.text(`Coached by: ${player.Name_of_Coach}`, 110, 110);
       doc.text(`Coach Tel: ${player.Number_of_coach}`, 110, 120);
       doc.text(`Scouted_By: ${player.Scouted_By}`, 110, 130);
   
       // Evaluation Table Title
-      const evaluationStartY = 145;
-      doc.setFontSize(14);
-      doc.setTextColor(40);
-      doc.text("Evaluation Parameters", 20, evaluationStartY);
+      const evaluationStartY = 150;
+      doc.setFontSize(18);
+      doc.setTextColor(100);
+      doc.text("Player Evaluation", 100, evaluationStartY, { align: "center" });
   
-      // Evaluation Table
-      const columns = ["Evaluation Metric", "Score"];
+      const margin = 14;
+      const lineHeight = 10;
+      let yCoordinate = 165;
       delete evaluation._id;
       delete evaluation.Player_id;
       const rows = Object.entries(evaluation).map(([key, value]) => [
         key,
         value,
       ]);
+
+      // Loop through each key-value pair in the JSON object
+      Object.keys(evaluation).forEach(key => {
+      // Skip the fields you want to exclude (like the email)
+      if (key === 'title' || key === 'email') return;
+
+      // Add the section key as a heading
+      doc.setFontSize(14);
+      doc.setTextColor(40);
+      doc.text(key.charAt(0).toUpperCase() + key.slice(1), margin, yCoordinate);
+      yCoordinate += lineHeight;
+
+      // Add the content of the section
+      doc.setFontSize(12);
+      const textWidth = 180; // Maximum width for text wrapping
+      const splitContent = doc.splitTextToSize(evaluation[key], textWidth);
+      doc.text(splitContent, margin, yCoordinate);
+      yCoordinate += splitContent.length * lineHeight + 5;
+
+      // Check if the content would overflow the page
+      if (yCoordinate + lineHeight > 280) {
+        doc.addPage();
+        yCoordinate = 20; // Reset y-coordinate for the new page
+      }
+    });
   
-      autoTable(doc, {
-        startY: evaluationStartY + 5,
-        head: [columns],
-        body: rows,
-        theme: "grid",
-        headStyles: { fillColor: [22, 160, 133], textColor: 255, fontSize: 12 },
-        bodyStyles: { fontSize: 10 },
-        styles: { cellPadding: 5, halign: "center" },
-        alternateRowStyles: { fillColor: [240, 240, 240] },
-      });
+      
   
       // Save the PDF
       doc.save("Evaluation_Report.pdf");

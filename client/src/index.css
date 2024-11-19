@@ -17,13 +17,13 @@
     scrollbar-width: none; /* For Firefox */
   }
 
-  --primary: #023222;
+  --primary: #212529;
   --seocondary: #fafafa;
-  --hover: #035a3d;
+  --hover: #495057;
   --filter: #288062;
   --text: #ccc;
   --altText: #1c1c1c;
-  --bkg: #fff;
+  --bkg: #e9ecef;
 
   /* --primary: #010e09;
   --seocondary: #fafafa;
@@ -96,8 +96,8 @@ input{
 }
 
 input:focus {
-  border-color: #4caf50; /* Green for soccer theme */
-  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+  border-color: var(--hover); /* Green for soccer theme */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
   outline: none;
 }
 

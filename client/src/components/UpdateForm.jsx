@@ -249,9 +249,15 @@ const AddForm = ({player}) => {
 
             <select name="position" id="position" value={playerData.position} onChange={handleInputChange}>
               <option value="">-- Select position --</option>
-              <option value="Foward">Foward</option>
-              <option value="Midfielder">Midfielder</option>
-              <option value="Defender">Defender</option>
+              <option value="Center Foward">Center Foward</option>
+              <option value="Right Winger">Right Winger</option>
+              <option value="Left Winger">Left Winger</option>
+              <option value="Central Attacking Midfielder">Central Attacking Midfielder</option>
+              <option value="Central Midfielder">Central Midfielder</option>
+              <option value="Defender Midfielder">Defender Midfielder</option>
+              <option value="Right Back">Right Back</option>
+              <option value="Left Back">Left Back</option>
+              <option value="Center Back">Center Back</option>
               <option value="Goalkeeper">Goalkeeper</option>
             </select>
             <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} >

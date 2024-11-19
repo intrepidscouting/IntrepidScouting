@@ -70,7 +70,7 @@ const AddForm = ({scoutName}) => {
   //Bug with the select fields
   const [playerData, setPlayerData] = useState({
     firstname: '', lastname: '',
-    dob: '',
+    dob: '', height: '',
     gender: '', club: '', 
     position: '', scoutedBy: '',
     foot: '', coachTel: '', region: '',  coachName: '',
@@ -82,6 +82,7 @@ const AddForm = ({scoutName}) => {
   const [imgName, setImgName] = useState(''); 
   const [flagMessage, setFlagMessage] = useState(''); 
   const [isVisible, setIsVisible] = useState(false); 
+  const [showDialog, setShowDialog] = useState(false); 
   const [loading, setLoading] = useState(false); 
 
   // Handle changes for input fields
@@ -101,6 +102,15 @@ const AddForm = ({scoutName}) => {
     }));
     setImgName( e.target.files[0].name);
   };
+
+  const handleDialog = () => {
+    setShowDialog(true);
+
+    // Automatically close the dialog after 2 seconds
+    setTimeout(() => {
+      setShowDialog(false);
+    }, 2000);
+  }
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -128,6 +138,7 @@ const AddForm = ({scoutName}) => {
     formData.append('Last_name', playerData.lastname);
     formData.append('Gender', playerData.gender);
     formData.append('Date_of_Birth', playerData.dob);
+    formData.append('Height', playerData.height);
     formData.append('Position', playerData.position);
     formData.append('Preferred_Foot', playerData.foot);
     formData.append('Region_scouted_in', playerData.region);
@@ -139,25 +150,6 @@ const AddForm = ({scoutName}) => {
     formData.append('NationalityISO', countrySearch.code);
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', scoutName);
-
-    // const jsonData = {
-    //   First_name: playerData.firstname,
-    //   Last_name: playerData.lastname,
-    //   Gender: playerData.gender,
-    //   Date_of_Birth: playerData.dob,
-    //   Position: playerData.position,
-    //   Preferred_Foot: playerData.foot,
-    //   Region_scouted_in: playerData.region,
-    //   Club: playerData.club,
-    //   Number_of_coach: playerData.coachTel,
-    //   Name_of_coach: playerData.coachName,
-    //   Image: playerData.image,
-    //   Nationality: playerData.nationality,
-    //   NationalityISO: countrySearch.code,
-    //   Status: playerData.status,
-    //   Scouted_By: scoutName,
-    // };
-
       
       try {
         
@@ -167,8 +159,8 @@ const AddForm = ({scoutName}) => {
           },
         });
         setplayerId(response._id);
-        setFlagMessage(`Begin evaluation of ${playerData.firstname} ${playerData.lastname} ====>>>>`);
         setIsVisible(true);
+        handleNext();
       } catch (error) {
         console.error('Error saving player:', error);
       }finally{
@@ -178,6 +170,7 @@ const AddForm = ({scoutName}) => {
 
   };
 
+  
   const [step, setStep] = useState(0);
 
   const handleNext = () => {
@@ -199,6 +192,7 @@ const AddForm = ({scoutName}) => {
       {/* Form 1 */}
       <div className="form-step">
       {loading && <LoadingScreen/>}
+      
         <h2>Player Entry Form</h2>
         <div className="registration-form-wrapper">
           <form className="registration-form" onSubmit={handleSubmit}>
@@ -210,6 +204,7 @@ const AddForm = ({scoutName}) => {
               <option value="Female">Female</option>
             </select>
             <input type="date" name='dob' value={playerData.dob} onChange={handleInputChange} placeholder="Date of birth" required/>
+            <input type="text" name='height' value={playerData.height} onChange={handleInputChange} placeholder="Height in cm"/>
 
             <select  name="nationality" id="nationality" value={playerData.nationality} onChange={handleInputChange}>
             <option value="">--Select Nationality --</option>
@@ -222,9 +217,15 @@ const AddForm = ({scoutName}) => {
 
             <select name="position" id="position" value={playerData.position} onChange={handleInputChange}>
               <option value="">-- Select position --</option>
-              <option value="Foward">Foward</option>
-              <option value="Midfielder">Midfielder</option>
-              <option value="Defender">Defender</option>
+              <option value="Center Foward">Center Foward</option>
+              <option value="Right Winger">Right Winger</option>
+              <option value="Left Winger">Left Winger</option>
+              <option value="Central Attacking Midfielder">Central Attacking Midfielder</option>
+              <option value="Central Midfielder">Central Midfielder</option>
+              <option value="Defender Midfielder">Defender Midfielder</option>
+              <option value="Right Back">Right Back</option>
+              <option value="Left Back">Left Back</option>
+              <option value="Center Back">Center Back</option>
               <option value="Goalkeeper">Goalkeeper</option>
             </select>
             <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} >
@@ -234,8 +235,8 @@ const AddForm = ({scoutName}) => {
             </select>
             <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
             <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
-            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Agent" required/>
-            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Agent Tel:" required/>
+            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" required/>
+            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
             <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
               <option value="">-- Select Status --</option>
               <option value="Signed" defaultValue>Signed</option>
@@ -259,14 +260,14 @@ const AddForm = ({scoutName}) => {
       </div>
     </div>
 
-    <div className="navigation-buttons">
+    {/* <div className="navigation-buttons">
         <button onClick={handlePrev} disabled={step === 0}>
           Previous
         </button>
         <button onClick={handleNext} disabled={step === 1}>
           Next
         </button>
-      </div>
+      </div> */}
   </div>
   )
 }

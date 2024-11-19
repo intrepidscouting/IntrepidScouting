@@ -113,6 +113,7 @@
     padding: 12px;
     text-align: left;
     border-bottom: 1px solid #e0e0e0;
+    text-align: center;
   }
   
   th {
@@ -161,8 +162,8 @@
 
 .status div{
     padding: 0.5rem 0.5rem;
-    max-width: 0.4rem;
-    height: 0.4rem;
+    margin: auto auto;
+    max-width:50%;
     border-radius: 50%;
   }
   
@@ -182,6 +183,11 @@
     background-color: #ffc107;
   }
 
+  .hover-info {
+    position: absolute;
+    margin-top: 20px;
+    font-size: 16px;
+  }
 
   /* Handle evaluation pop */
 
@@ -192,4 +198,27 @@
     width: 80%;
     height: 100vh;
     border-left: solid 1px #aaa;
+  }
+
+
+  .tooltip {
+    position: relative;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 100px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+  
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
   }
