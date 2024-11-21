@@ -72,10 +72,15 @@ const AddForm = ({scoutName}) => {
     firstname: '', lastname: '',
     dob: '', height: '',
     gender: '', club: '', 
-    position: '', scoutedBy: '',
+    position: '', scoutedBy: '', date_Added: '',
     foot: '', coachTel: '', region: '',  coachName: '',
     image: null, // For storing the image file
   });
+
+  const getTodayDate = () => {
+    const today = new Date();
+    return today.toISOString().split('T')[0];
+  };
 
   const [playerId, setplayerId] = useState(); 
   const [countryCode, setCountryCode] = useState(''); 
@@ -100,7 +105,6 @@ const AddForm = ({scoutName}) => {
       ...prevData,
       image: e.target.files[0],
     }));
-    setImgName( e.target.files[0].name);
   };
 
   const handleDialog = () => {
@@ -150,6 +154,8 @@ const AddForm = ({scoutName}) => {
     formData.append('NationalityISO', countrySearch.code);
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', scoutName);
+    formData.append('Date_Added', getTodayDate());
+
       
       try {
         
@@ -259,15 +265,6 @@ const AddForm = ({scoutName}) => {
         <EvaluationForm2 newPlayerId={playerId}/> 
       </div>
     </div>
-
-    {/* <div className="navigation-buttons">
-        <button onClick={handlePrev} disabled={step === 0}>
-          Previous
-        </button>
-        <button onClick={handleNext} disabled={step === 1}>
-          Next
-        </button>
-      </div> */}
   </div>
   )
 }

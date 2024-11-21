@@ -57,7 +57,7 @@ const EvaluationView = ({player}) => {
                 <div className="img">
                     <img src={player.Image} alt="" />
                 </div>
-                <h2>{player.First_name + player.Last_name}</h2>
+                <h2>{player.First_name + " " + player.Last_name}</h2>
             </div>
             <div className="personal_btm">
                 <div className="personal_detail">
@@ -99,6 +99,10 @@ const EvaluationView = ({player}) => {
                 <div className="personal_detail">
                     <span>Conatct Coach: </span>
                     <p>{player.Number_of_coach}</p>
+                </div>
+                <div className="personal_detail">
+                    <span>Date Added: </span>
+                    <p>{formatDate(player.Date_Added)}</p>
                 </div>
             <ExportStyledPDF player={player} evaluation={ratings}/>    
             </div>

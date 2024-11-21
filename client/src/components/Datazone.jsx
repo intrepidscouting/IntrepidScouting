@@ -357,12 +357,12 @@ const Datazone = ({scoutName}) => {
               
             </td>
             <td className='trash-td'  onClick={(event) => deletePlayer(event, player._id)}>
-              <div className='trash-icon'>
+              <div className='trash-icon' title='delete'>
                 <FontAwesomeIcon icon={faTrash}/>
               </div>
             </td>
             <td className='edit-td'  onClick={() => {showUpadte();}}>
-              <div className='edit-icon'>
+              <div className='edit-icon' title='edit'>
                 <FontAwesomeIcon icon={faPencil}/>
               </div>
             </td>

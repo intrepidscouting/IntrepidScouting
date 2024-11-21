@@ -18,6 +18,7 @@ const PlayerSchema = new mongoose.Schema({
     Region_scouted_in: String,
     Scouted_By: String,
     Image: String,
+    Date_Added: Date
 })
 
 const PlayerModel = mongoose.model("Player", PlayerSchema) //creating a collection

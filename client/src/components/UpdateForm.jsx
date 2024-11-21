@@ -1,8 +1,7 @@
 import React, { useState , useEffect } from "react";
 import './css/UpdateForm.css'
-import EvaluationForm from "./EvaluationForm";
 import { apiService } from "../services/apiService";
-import EvaluationForm2 from "./EvaluationForm2";
+import LoadingScreen from "./Loading.jsx";
 
 const AddForm = ({player}) => {
 
@@ -66,7 +65,7 @@ const AddForm = ({player}) => {
   //Bug with the select fields
   const [playerData, setPlayerData] = useState({
     firstname: '', lastname: '',
-    dob: '',
+    dob: '', height:'',
     gender: '', club: '', 
     position: '', scoutedBy: '',
     foot: '', coachTel: '', region: '', 
@@ -81,6 +80,7 @@ const AddForm = ({player}) => {
   const [flagMessage, setFlagMessage] = useState(''); 
   const [isVisible, setIsVisible] = useState(false); 
   const [showDialog, setShowDialog] = useState(false);
+  const [loading, setLoading] = useState(false); 
 
   const handleDialog = () => {
     setShowDialog(true);
@@ -96,12 +96,18 @@ const AddForm = ({player}) => {
     const newdate = date.toLocaleDateString();  // This will format the date according to the user's locale
     const [month, day, year] = newdate.split('/');
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-    };
+  };
+
+  const handleFileChange = (e) => {
+    setPlayerData((prevData) => ({
+      ...prevData,
+      image: e.target.files[0],
+    }));
+  };
 
 
   // Populate form data from props on component mount
   useEffect(() => {
-    console.log(player.Date_of_Birth);
     if (player) {
       setPlayerData({
         firstname: player.First_name || '', 
@@ -118,6 +124,7 @@ const AddForm = ({player}) => {
         nationalityISO: player.NationalityISO || '', 
         region: player.Region_scouted_in || '',
         status: player.Status || '',
+        height: player.Height || '',
         image:  player.Image || '', // For storing the image file
 
       });
@@ -137,6 +144,7 @@ const AddForm = ({player}) => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (
       playerData.gender.length === 0 || playerData.status.length === 0 || playerData.nationality.length === 0
@@ -155,57 +163,58 @@ const AddForm = ({player}) => {
       setCountryCode("");
     }
 
-    // const formData = new FormData();
-    // formData.append('First_name', playerData.firstname);
-    // formData.append('Last_name', playerData.lastname);
-    // formData.append('Gender', playerData.gender);
-    // formData.append('Date_of_Birth', playerData.dob);
-    // formData.append('Position', playerData.position);
-    // formData.append('Preferred_Foot', playerData.foot);
-    // formData.append('Region_scouted_in', playerData.region);
-    // formData.append('Club', playerData.club);
-    // formData.append('Number_of_coach', playerData.coachTel);
-    // formData.append('Name_of_coach', playerData.coachName);
-    // // formData.append('Image', player.image);
-    // formData.append('Nationality', playerData.nationality);
-    // formData.append('NationalityISO', countrySearch.code);
-    // formData.append('Status', playerData.status);
-    // formData.append('Scouted_By', player.Scouted_By);
+    const formData = new FormData();
+    formData.append('First_name', playerData.firstname);
+    formData.append('Last_name', playerData.lastname);
+    formData.append('Gender', playerData.gender);
+    formData.append('Date_of_Birth', playerData.dob);
+    formData.append('Position', playerData.position);
+    formData.append('Preferred_Foot', playerData.foot);
+    formData.append('Region_scouted_in', playerData.region);
+    formData.append('Club', playerData.club);
+    formData.append('Number_of_coach', playerData.coachTel);
+    formData.append('Coach', playerData.coachName);
+    formData.append('Image', playerData.image);
+    // formData.append('Image', playerData.image != null ? playerData.image : player.Image);
+    formData.append('Nationality', playerData.nationality);
+    formData.append('NationalityISO', countrySearch.code);
+    formData.append('Status', playerData.status);
+    formData.append('Scouted_By', player.Scouted_By);
+    formData.append('Height', playerData.height);
 
-    const jsonData = {
-      First_name: playerData.firstname,
-      Last_name: playerData.lastname,
-      Gender: playerData.gender,
-      Date_of_Birth: playerData.dob,
-      Position: playerData.position,
-      Preferred_Foot: playerData.foot,
-      Region_scouted_in: playerData.region,
-      Club: playerData.club,
-      Number_of_coach: playerData.coachTel,
-      Name_of_coach: playerData.coachName,
-      // Image: playerData.image,
-      Nationality: playerData.nationality,
-      NationalityISO: countrySearch.code,
-      Status: playerData.status,
-      Scouted_By: player.Scouted_By,
-    };
+    // const jsonData = {
+    //   First_name: playerData.firstname,
+    //   Last_name: playerData.lastname,
+    //   Gender: playerData.gender,
+    //   Date_of_Birth: playerData.dob,
+    //   Position: playerData.position,
+    //   Preferred_Foot: playerData.foot,
+    //   Region_scouted_in: playerData.region,
+    //   Club: playerData.club,
+    //   Number_of_coach: playerData.coachTel,
+    //   Name_of_coach: playerData.coachName,
+    //   // Image: playerData.image,
+    //   Nationality: playerData.nationality,
+    //   NationalityISO: countrySearch.code,
+    //   Status: playerData.status,
+    //   Scouted_By: player.Scouted_By,
+    // };
 
-      
       try {
         
-        const response = await apiService.put(`/players/update/${player._id}/`, jsonData, {
+        const response = await apiService.put(`/players/update/${player._id}/`, formData, {
           headers: {
-            'Content-Type': "application/json",
+            // 'Content-Type': "application/json",
+            'Content-Type': "multipart/form-data",
           },
         });
-        // console.log('Player saved successfully:', response._id);
+        console.log(playerData.image);
         setplayerId(response._id);
-        // setFlagMessage(`Player Update was successful`);
-        // setIsVisible(true);
         handleDialog();
       } catch (error) {
         console.error('Error saving player:', error);
-        console.log(playerData.image);
+      } finally{
+        setLoading(false);
       }
     }
 
@@ -214,7 +223,7 @@ const AddForm = ({player}) => {
   return(
     <div className="add-form-container">
       
-    <div className="form-wrapperr">
+    {/* <div className="form-wrapperr">
       {showDialog && (
           <div className="dialog">
             <div className="dialogContent">
@@ -224,7 +233,7 @@ const AddForm = ({player}) => {
           </div>
         )}
 
-      {/* Form 1 */}
+
       <div className="form-step">
         <h2>{`Update Details of ${player.First_name}`}</h2>
         <div className="registration-form-wrapper">
@@ -276,12 +285,77 @@ const AddForm = ({player}) => {
               <option value="Trials">Trials</option>
               <option value="Leave">Leave</option>
             </select>
-            {/* <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg" required/> */}
             <div className="btnsub">
               <button type="submit" >Update Player</button>
             </div>
           </form>
           {isVisible && <p className="flagMsg">{flagMessage}</p>}
+        </div>
+        
+      </div>
+    </div> */}
+
+    <div className="form-wrapperr">
+
+      <div className="form-step">
+      {loading && <LoadingScreen/>}
+      
+        <h2>Player Entry Form</h2>
+        <div className="registration-form-wrapper">
+          <form className="registration-form" onSubmit={handleSubmit}>
+          <input type="text" name='firstname' value={playerData.firstname} onChange={handleInputChange} placeholder="Firstname of player" required/>
+          <input type="text" name='lastname' value={playerData.lastname} onChange={handleInputChange} placeholder="Lastname of player" required/>
+            <select name="gender" id="gender" value={playerData.gender} onChange={handleInputChange} defaultValue="Male">
+              <option value="">-- Select gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+            <input type="date" name='dob' value={playerData.dob} onChange={handleInputChange} placeholder="Date of birth" required/>
+            <input type="text" name='height' value={playerData.height} onChange={handleInputChange} placeholder="Height in cm" defaultValue={"N/A"}/>
+
+            <select  name="nationality" id="nationality" value={playerData.nationality} onChange={handleInputChange}>
+            <option value="">--Select Nationality --</option>
+            {africanCountries.map((country, index) => (
+              <option key={country.code} value={country.name}>
+                {country.name}
+              </option>
+            ))}
+          </select>
+
+            <select name="position" id="position" value={playerData.position} onChange={handleInputChange}>
+              <option value="">-- Select position --</option>
+              <option value="Center Foward">Center Foward</option>
+              <option value="Right Winger">Right Winger</option>
+              <option value="Left Winger">Left Winger</option>
+              <option value="Central Attacking Midfielder">Central Attacking Midfielder</option>
+              <option value="Central Midfielder">Central Midfielder</option>
+              <option value="Defender Midfielder">Defender Midfielder</option>
+              <option value="Right Back">Right Back</option>
+              <option value="Left Back">Left Back</option>
+              <option value="Center Back">Center Back</option>
+              <option value="Goalkeeper">Goalkeeper</option>
+            </select>
+            <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} >
+              <option value="">-- Select Preferred Foot --</option>
+              <option value="Left">Left</option>
+              <option value="Right">Right</option>
+            </select>
+            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
+            <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
+            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" required/>
+            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
+            <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
+              <option value="">-- Select Status --</option>
+              <option value="Signed" defaultValue>Signed</option>
+              <option value="Follow">Follow</option>
+              <option value="Trials">Trials</option>
+              <option value="Leave">Leave</option>
+            </select>
+            <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg"/>
+            <div className="btnsub">
+              <button type="submit" >Add Player</button>
+            </div>
+          </form>
         </div>
         
       </div>

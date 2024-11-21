@@ -111,7 +111,7 @@ const ExportStyledPDF = ({player, evaluation}) => {
 
   return (
     <div>
-      <button onClick={generatePDF}>
+      <button onClick={generatePDF} title="Export pdf"> 
       <FontAwesomeIcon icon={faFileExport}/>
       </button>
     </div>
