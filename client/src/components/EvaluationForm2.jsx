@@ -54,7 +54,7 @@ const EvaluationForm2 = ({newPlayerId}) => {
       {showDialog && (
         <div className="dialogStyles">
           <div className="dialogContent">
-            <p>Player Added to Databse successfully</p>
+            <p>Player Details Successfully Updated</p>
             <button onClick={() => setShowDialog(false)}>Close</button>
           </div>
         </div>

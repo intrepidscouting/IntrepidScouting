@@ -26,11 +26,13 @@
 
   .login-box{
     display: block;
-    background: var(--secondary);
+    background: var(--bkg);
   }
 
   .login-button{
     width: 100%;
+    background: var(--altText);
+    color: var(--text);
   }
   
 
