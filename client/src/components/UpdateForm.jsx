@@ -294,6 +294,14 @@ const AddForm = ({player}) => {
         
       </div>
     </div> */}
+    {showDialog && (
+        <div className="dialogStyles">
+          <div className="dialogContent">
+            <p>Player Added to Databse successfully</p>
+            <button onClick={() => setShowDialog(false)}>Close</button>
+          </div>
+        </div>
+      )}
 
     <div className="form-wrapperr">
 
