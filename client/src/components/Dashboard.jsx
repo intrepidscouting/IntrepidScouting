@@ -42,6 +42,27 @@ const Dashboard = () => {
       verifyToken();
   }, [navigate]);
 
+  useEffect(() => {
+    let timer;
+    const resetTimer = () => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            localStorage.removeItem('jwtToken'); // Clear token
+            window.location.href = '/'; // Redirect to homepage
+        }, 5 * 60 * 1000); // 5 minutes inactivity
+    };
+
+    window.addEventListener('mousemove', resetTimer);
+    window.addEventListener('keypress', resetTimer);
+
+    resetTimer(); // Initialize timer
+
+    return () => {
+        clearTimeout(timer);
+        window.removeEventListener('mousemove', resetTimer);
+        window.removeEventListener('keypress', resetTimer);
+    };
+}, []);
 
   // Function to handle switching of components
   const handleComponentChange = (component) => {
