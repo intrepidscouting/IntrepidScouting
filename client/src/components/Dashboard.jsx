@@ -13,25 +13,28 @@ import AddForm from './AddForm'
 const Dashboard = () => {
 
   const location = useLocation();
-  const loginId = location.state?.message;
-  const scoutName = location.state?._scoutName; // Access the state passed via navigate
+  const [loginId, setLoginId] = useState(); 
+  const [scoutName, setScoutName] = useState(); 
+  // const scoutName = location.state?._scoutName; // Access the state passed via navigate
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [selectedComponent, setSelectedComponent] = useState('A');
 
   useEffect(() => {
+    // const location = useLocation();
+    setLoginId(location.state?.message);
+    setScoutName(location.state?._scoutName); // Access the state passed via navigate
+
     const verifyToken = async () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('jwtToken');
         if (!token) {
             navigate('/'); // Redirect to homepage if no token
             return;
         }
         try {
-            await axios.get('/api/dashboard', {
-                headers: { Authorization: token },
-            });
+            navigate("/dashboard");
         } catch (error) {
-            localStorage.removeItem('token'); // Clear invalid token
+            localStorage.removeItem('jwtToken'); // Clear invalid token
             navigate('/'); // Redirect to homepage
         }
     };
@@ -60,7 +63,7 @@ const Dashboard = () => {
   }
   const handleLogout = () => {
     
-    localStorage.removeItem("token");  // Remove JWT token
+    localStorage.removeItem("jwtToken");  // Remove JWT token
     navigate("/");  // Redirect back to login page
   };
 
