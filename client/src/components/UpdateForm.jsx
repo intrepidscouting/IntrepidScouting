@@ -271,7 +271,7 @@ const UpdateForm = ({player}) => {
             <input type="tel" name='agentTel' value= {playerData.agentTel} onChange={handleInputChange} placeholder="Agent Tel:" defaultValue={"N/A"}/>
             <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
               <option value="">-- Select Status --</option>
-              <option value="Signed" defaultValue>Signed</option>
+              <option value="Signed" defaultValue>Signed</option> 
               <option value="Follow">Follow</option>
               <option value="Trials">Trials</option>
               <option value="Leave">Leave</option>
