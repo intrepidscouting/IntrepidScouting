@@ -20,8 +20,8 @@ const createPlayers = async (req, res) => {
      const db_connect = dbo.getDb()
      try{
           const { First_name, Last_name, Gender, Date_of_Birth, Height,
-               Position, Nationality, NationalityISO, Club,
-               Preferred_Foot, Status, Coach, 
+               Position, Nationality, NationalityISO, Club, Market_Value,
+               Preferred_Foot, Status, Coach, Number_of_agent, Agent,
                Number_of_coach, Region_scouted_in, Scouted_By, Date_Added } = req.body;
 
           if (!req.file) {
@@ -31,8 +31,8 @@ const createPlayers = async (req, res) => {
 
           // Create a new image document
           const player = new PlayerModel({
-               First_name, Last_name, Gender, Date_of_Birth, Height,
-               Position, Nationality, NationalityISO, Club,
+               First_name, Last_name, Gender, Date_of_Birth, Height, Market_Value,
+               Position, Nationality, NationalityISO, Club,  Number_of_agent, Agent,
                Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added,
                Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`// store the image path
           });
@@ -41,7 +41,7 @@ const createPlayers = async (req, res) => {
           res.status(200).json(player)
      
      } catch (error) {
-          console.log(error.message )
+          console.log(error.message)
           res.status(500).json({message: error.message})
      }
 }
@@ -63,9 +63,12 @@ const updatePlayers = async (req, res) => {
                Preferred_Foot: req.body.Preferred_Foot,
                Status: req.body.Status,
                Coach: req.body.Coach,
+               Agent: req.body.Agent,
                Number_of_coach: req.body.Number_of_coach,
+               Number_of_agent: req.body.Number_of_agent,
                Region_scouted_in: req.body.Region_scouted_in,
                Scouted_By: req.body.Scouted_By,
+               Market_Value: req.body.Market_Value,
                Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`,
           }} : 
           {
@@ -81,10 +84,13 @@ const updatePlayers = async (req, res) => {
                     Club: req.body.Club,
                     Preferred_Foot: req.body.Preferred_Foot,
                     Status: req.body.Status,
+                    Agent: req.body.Agent,
                     Coach: req.body.Coach,
                     Number_of_coach: req.body.Number_of_coach,
+                    Number_of_agent: req.body.Number_of_agent,
                     Region_scouted_in: req.body.Region_scouted_in,
                     Scouted_By: req.body.Scouted_By,
+                    Market_Value: req.body.Market_Value,
                }}
 
      try{

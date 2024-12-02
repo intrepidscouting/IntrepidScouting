@@ -3,7 +3,7 @@ import './css/UpdateForm.css'
 import { apiService } from "../services/apiService";
 import LoadingScreen from "./Loading.jsx";
 
-const AddForm = ({player}) => {
+const UpdateForm = ({player}) => {
 
   const africanCountries = [
     { "name": "Algeria", "code": "DZ" },
@@ -68,9 +68,9 @@ const AddForm = ({player}) => {
     dob: '', height:'',
     gender: '', club: '', 
     position: '', scoutedBy: '',
-    foot: '', coachTel: '', region: '', 
-    coachName: '', nationalityISO: '',
-    nationality:'', status: '',
+    foot: '', coachTel: '', region: '', agentName: '',
+    coachName: '', nationalityISO: '', agentTel: '',
+    nationality:'', status: '', marketValue: 0,
     image: '', // For storing the image file
   });
 
@@ -120,6 +120,8 @@ const AddForm = ({player}) => {
         foot: player.Preferred_Foot || '', 
         coachTel: player.Number_of_coach || '', 
         coachName: player.Coach || '', 
+        agentTel: player.Number_of_agent || '', 
+        agentName: player.Agent || '', 
         nationality: player.Nationality || '', 
         nationalityISO: player.NationalityISO || '', 
         region: player.Region_scouted_in || '',
@@ -175,30 +177,14 @@ const AddForm = ({player}) => {
     formData.append('Number_of_coach', playerData.coachTel);
     formData.append('Coach', playerData.coachName);
     formData.append('Image', playerData.image);
-    // formData.append('Image', playerData.image != null ? playerData.image : player.Image);
     formData.append('Nationality', playerData.nationality);
+    formData.append('Number_of_agent', playerData.agentTel);
+    formData.append('Agent', playerData.agentName);
     formData.append('NationalityISO', countrySearch.code);
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', player.Scouted_By);
     formData.append('Height', playerData.height);
-
-    // const jsonData = {
-    //   First_name: playerData.firstname,
-    //   Last_name: playerData.lastname,
-    //   Gender: playerData.gender,
-    //   Date_of_Birth: playerData.dob,
-    //   Position: playerData.position,
-    //   Preferred_Foot: playerData.foot,
-    //   Region_scouted_in: playerData.region,
-    //   Club: playerData.club,
-    //   Number_of_coach: playerData.coachTel,
-    //   Name_of_coach: playerData.coachName,
-    //   // Image: playerData.image,
-    //   Nationality: playerData.nationality,
-    //   NationalityISO: countrySearch.code,
-    //   Status: playerData.status,
-    //   Scouted_By: player.Scouted_By,
-    // };
+    formData.append('Market_Value', playerData.marketValue);
 
       try {
         
@@ -222,82 +208,11 @@ const AddForm = ({player}) => {
 
   return(
     <div className="add-form-container">
-      
-    {/* <div className="form-wrapperr">
-      {showDialog && (
-          <div className="dialog">
-            <div className="dialogContent">
-              <p>Player Update was successfully</p>
-              <button onClick={() => setShowDialog(false)}>Close</button>
-            </div>
-          </div>
-        )}
 
-
-      <div className="form-step">
-        <h2>{`Update Details of ${player.First_name}`}</h2>
-        <div className="registration-form-wrapper">
-          <form className="registration-form" onSubmit={handleSubmit}>
-          <input type="text" name='firstname' value={playerData.firstname} onChange={handleInputChange} placeholder="Firstname of player" required/>
-          <input type="text" name='lastname' value={playerData.lastname} onChange={handleInputChange} placeholder="Lastname of player" required/>
-            <select name="gender" id="gender" value={playerData.gender} onChange={handleInputChange} defaultValue="Male">
-              <option value="">-- Select gender --</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
-            <input type="date" name='dob' value={playerData.dob} onChange={handleInputChange} placeholder="Date of birth" required/>
-
-            <select  name="nationality" id="nationality" value={playerData.nationality} onChange={handleInputChange}>
-            <option value="">--Select Nationality --</option>
-            {africanCountries.map((country, index) => (
-              <option key={country.code} value={country.name}>
-                {country.name}
-              </option>
-            ))}
-          </select>
-
-            <select name="position" id="position" value={playerData.position} onChange={handleInputChange}>
-              <option value="">-- Select position --</option>
-              <option value="Center Foward">Center Foward</option>
-              <option value="Right Winger">Right Winger</option>
-              <option value="Left Winger">Left Winger</option>
-              <option value="Central Attacking Midfielder">Central Attacking Midfielder</option>
-              <option value="Central Midfielder">Central Midfielder</option>
-              <option value="Defender Midfielder">Defender Midfielder</option>
-              <option value="Right Back">Right Back</option>
-              <option value="Left Back">Left Back</option>
-              <option value="Center Back">Center Back</option>
-              <option value="Goalkeeper">Goalkeeper</option>
-            </select>
-            <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} >
-              <option value="">-- Select Preferred Foot --</option>
-              <option value="Left">Left</option>
-              <option value="Right">Right</option>
-            </select>
-            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
-            <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
-            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach name" required/>
-            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
-            <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
-              <option value="">-- Select Status --</option>
-              <option value="Signed" defaultValue>Signed</option>
-              <option value="Follow">Follow</option>
-              <option value="Trials">Trials</option>
-              <option value="Leave">Leave</option>
-            </select>
-            <div className="btnsub">
-              <button type="submit" >Update Player</button>
-            </div>
-          </form>
-          {isVisible && <p className="flagMsg">{flagMessage}</p>}
-        </div>
-        
-      </div>
-    </div> */}
     {showDialog && (
         <div className="dialogStyles">
           <div className="dialogContent">
-            <p>Player Added to Databse successfully</p>
+            <p>Player Details Updated Successfully</p>
             <button onClick={() => setShowDialog(false)}>Close</button>
           </div>
         </div>
@@ -308,7 +223,7 @@ const AddForm = ({player}) => {
       <div className="form-step">
       {loading && <LoadingScreen/>}
       
-        <h2>Player Entry Form</h2>
+        <h2>Player Update Form</h2>
         <div className="registration-form-wrapper">
           <form className="registration-form" onSubmit={handleSubmit}>
           <input type="text" name='firstname' value={playerData.firstname} onChange={handleInputChange} placeholder="Firstname of player" required/>
@@ -348,10 +263,12 @@ const AddForm = ({player}) => {
               <option value="Left">Left</option>
               <option value="Right">Right</option>
             </select>
-            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
+            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" defaultValue={"N/A"}/>
             <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
-            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" required/>
-            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
+            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" defaultValue={"N/A"}/>
+            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" defaultValue={"N/A"}/>
+            <input type="text" name='agentName' value={playerData.agentName} onChange={handleInputChange} placeholder="Agent" defaultValue={"N/A"}/>
+            <input type="tel" name='agentTel' value= {playerData.agentTel} onChange={handleInputChange} placeholder="Agent Tel:" defaultValue={"N/A"}/>
             <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
               <option value="">-- Select Status --</option>
               <option value="Signed" defaultValue>Signed</option>
@@ -359,9 +276,10 @@ const AddForm = ({player}) => {
               <option value="Trials">Trials</option>
               <option value="Leave">Leave</option>
             </select>
+            <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros" defaultValue={"N/A"}/>
             <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg"/>
             <div className="btnsub">
-              <button type="submit" >Add Player</button>
+              <button type="submit" >Update Player</button>
             </div>
           </form>
         </div>
@@ -373,4 +291,4 @@ const AddForm = ({player}) => {
   )
 }
 
-export default AddForm
+export default UpdateForm

@@ -8,7 +8,7 @@ const LoadingScreen = () => {
     return (
       <div className="loading-overlay">
         <Lottie animationData={loadingAnimation} loop={true} />
-      </div>
+      </div> 
     );
   }
   

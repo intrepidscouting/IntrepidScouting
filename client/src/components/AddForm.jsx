@@ -73,7 +73,8 @@ const AddForm = ({scoutName}) => {
     dob: '', height: '',
     gender: '', club: '', 
     position: '', scoutedBy: '', date_Added: '',
-    foot: '', coachTel: '', region: '',  coachName: '',
+    foot: '', coachTel: '', region: '',  coachName: '', marketValue: '',
+    agentName: '', agentTel: '',
     image: null, // For storing the image file
   });
 
@@ -127,6 +128,7 @@ const AddForm = ({scoutName}) => {
       setFlagMessage("Kindly enter all the details of the player");
       setIsVisible(true);
       console.log("empty forms");
+      setLoading(false);
     } else {
       const countrySearch = africanCountries.find((africanCountry) => africanCountry.name === playerData.nationality);
     
@@ -149,11 +151,14 @@ const AddForm = ({scoutName}) => {
     formData.append('Club', playerData.club);
     formData.append('Number_of_coach', playerData.coachTel);
     formData.append('Coach', playerData.coachName);
+    formData.append('Number_of_agent', playerData.agentTel);
+    formData.append('Agent', playerData.agentName);
     formData.append('Image', playerData.image);
     formData.append('Nationality', playerData.nationality);
     formData.append('NationalityISO', countrySearch.code);
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', scoutName);
+    formData.append('Market_Value', playerData.marketValue);
     formData.append('Date_Added', getTodayDate());
 
       
@@ -234,15 +239,17 @@ const AddForm = ({scoutName}) => {
               <option value="Center Back">Center Back</option>
               <option value="Goalkeeper">Goalkeeper</option>
             </select>
-            <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} >
+            <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} defaultValue={"Left"}>
               <option value="">-- Select Preferred Foot --</option>
               <option value="Left">Left</option>
               <option value="Right">Right</option>
             </select>
-            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" required/>
+            <input type="text" name='region' value={playerData.region} onChange={handleInputChange} placeholder="Region Scouted" defaultValue={"N/A"}/>
             <input type="text" name='club' value={playerData.club} onChange={handleInputChange} placeholder="Club name" required/>
-            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" required/>
-            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" required/>
+            <input type="text" name='coachName' value={playerData.coachName} onChange={handleInputChange} placeholder="Coach" defaultValue={"N/A"}/>
+            <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" defaultValue={"N/A"}/>
+            <input type="text" name='agentName' value={playerData.agentName} onChange={handleInputChange} placeholder="Agent" defaultValue={"N/A"}/>
+            <input type="tel" name='agentTel' value= {playerData.agentTel} onChange={handleInputChange} placeholder="Agent Tel:" defaultValue={"N/A"}/>
             <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
               <option value="">-- Select Status --</option>
               <option value="Signed" defaultValue>Signed</option>
@@ -250,6 +257,7 @@ const AddForm = ({scoutName}) => {
               <option value="Trials">Trials</option>
               <option value="Leave">Leave</option>
             </select>
+            <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros" defaultValue={"N/A"}/>
             <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg" required/>
             <div className="btnsub">
               <button type="submit" >Add Player</button>

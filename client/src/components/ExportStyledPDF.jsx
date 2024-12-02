@@ -11,7 +11,11 @@ const ExportStyledPDF = ({player, evaluation}) => {
     const formatDate = (isoDate) => {
         const date = new Date(isoDate);
         return date.toLocaleDateString();  // This will format the date according to the user's locale
-        };
+    };
+
+    const handleEmptyFields = (field) =>{
+      return field.length === 0 ? "N/A" : field;
+    }
     
     // Adding an Image (e.g., logo or profile picture)
     const imgWidth = 40; // Width of the image
@@ -52,25 +56,31 @@ const ExportStyledPDF = ({player, evaluation}) => {
       doc.text(`Name: ${player.First_name} ${player.Last_name}`, 20, 90);
       doc.text(`Date of Birth: ${formatDate(player.Date_of_Birth)}`, 20, 100);
       doc.text(`Nationality: ${player.Nationality}`, 20, 110);
-      doc.text(`Position: ${player.Position}`, 20, 120);
+      doc.text(`Coached by: ${handleEmptyFields(player.Coach)}`, 20, 120);
       doc.text(`Preferred Foot: ${player.Preferred_Foot}`, 20, 130);
-      doc.text(`Region_scouted_in: ${player.Region_scouted_in}`, 110, 140);
+      doc.text(`Agent: ${handleEmptyFields(player.Agent)}`, 20, 140);
+      doc.text(`Region Scouted In: ${handleEmptyFields(player.Region_scouted_in)}`, 20, 150);
+      doc.text(`Contract Duration:`, 20, 160);
 
+      
       doc.text(`Club: ${player.Club}`, 110, 90);
-      doc.text(`Height: ${player.Height}`, 110, 100);
-      doc.text(`Coached by: ${player.Name_of_Coach}`, 110, 110);
-      doc.text(`Coach Tel: ${player.Number_of_coach}`, 110, 120);
-      doc.text(`Scouted_By: ${player.Scouted_By}`, 110, 130);
+      doc.text(`Height: ${handleEmptyFields(player.Height)}cm`, 110, 100);
+      doc.text(`Position: ${player.Position}`, 110, 110);
+      doc.text(`Coach Tel: ${handleEmptyFields(player.Number_of_coach)}`, 110, 120);
+      doc.text(`Scouted by: ${player.Scouted_By}`, 110, 130);
+      doc.text(`Agent Contact: ${handleEmptyFields(player.Number_of_agent)}`, 110, 140);
+      doc.text(`Market Value: ${handleEmptyFields(player.Market_Value)}`, 110, 150);
+      
   
       // Evaluation Table Title
-      const evaluationStartY = 150;
+      const evaluationStartY = 175;
       doc.setFontSize(18);
       doc.setTextColor(100);
       doc.text("Player Evaluation", 100, evaluationStartY, { align: "center" });
   
       const margin = 14;
       const lineHeight = 10;
-      let yCoordinate = 165;
+      let yCoordinate = 185;
       delete evaluation._id;
       delete evaluation.Player_id;
       const rows = Object.entries(evaluation).map(([key, value]) => [
@@ -106,7 +116,7 @@ const ExportStyledPDF = ({player, evaluation}) => {
       
   
       // Save the PDF
-      doc.save("Evaluation_Report.pdf");
+      doc.save(`${player.First_name} ${player.Last_name} ` + "Report.pdf");
     };
 
   return (
