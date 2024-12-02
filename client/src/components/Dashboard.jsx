@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import Datazone from './Datazone'
 import Settings from './Settings'
@@ -16,9 +16,29 @@ const Dashboard = () => {
   const loginId = location.state?.message;
   const scoutName = location.state?._scoutName; // Access the state passed via navigate
   const [loading, setLoading] = useState(false);
-  
-
+  const navigate = useNavigate();
   const [selectedComponent, setSelectedComponent] = useState('A');
+
+  useEffect(() => {
+    const verifyToken = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/'); // Redirect to homepage if no token
+            return;
+        }
+        try {
+            await axios.get('/api/dashboard', {
+                headers: { Authorization: token },
+            });
+        } catch (error) {
+            localStorage.removeItem('token'); // Clear invalid token
+            navigate('/'); // Redirect to homepage
+        }
+    };
+
+      verifyToken();
+  }, [navigate]);
+
 
   // Function to handle switching of components
   const handleComponentChange = (component) => {
@@ -38,12 +58,13 @@ const Dashboard = () => {
         return <Datazone key="A" scoutName={scoutName}/>;
     }
   }
-  const navigate = useNavigate();
   const handleLogout = () => {
     
     localStorage.removeItem("token");  // Remove JWT token
     navigate("/");  // Redirect back to login page
   };
+
+
 
   return (
     <div className="holder">
