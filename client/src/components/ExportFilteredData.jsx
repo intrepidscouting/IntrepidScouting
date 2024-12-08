@@ -18,7 +18,6 @@ const PlayerListPDF = ({players, gotoDash}) => {
     }
 
     useEffect(()=>{
-        console.log(players);
         setData(players);
     }, []);
 
@@ -58,7 +57,7 @@ const PlayerListPDF = ({players, gotoDash}) => {
       bodyStyles: { fontSize: 10 },
       styles: { halign: "center" },
       body: data.map((player, index) => [
-        Number(index) + 1,
+        index.length != 0 ? Number(index) + 1 : '1',
         `${player.First_name} ${player.Last_name}`,
         formatDate(player.Date_of_Birth),
         handleEmptyFields(player.Position),
