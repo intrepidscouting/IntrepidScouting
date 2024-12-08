@@ -52,7 +52,7 @@ const PlayerListPDF = ({players, gotoDash}) => {
     // Add a table with player data
     doc.autoTable({
       startY: 60, // Start below the user text
-      head: [['#', 'Name', 'Date of Birth', 'Position', 'Agent', 'Scouted By', 'Status']],
+      head: [['#', 'Name', 'Date of Birth', 'Position', 'Nationality', 'Scouted By', 'Status']],
       headStyles: { fillColor: [10, 10, 10], textColor: 255, fontSize: 14 },
       bodyStyles: { fontSize: 10 },
       styles: { halign: "center" },
@@ -61,7 +61,7 @@ const PlayerListPDF = ({players, gotoDash}) => {
         `${player.First_name} ${player.Last_name}`,
         formatDate(player.Date_of_Birth),
         handleEmptyFields(player.Position),
-        handleEmptyFields(player.Agent),
+        handleEmptyFields(player.Nationality),
         handleEmptyFields(player.Scouted_By),
         handleEmptyFields(player.Status),
       ]),
