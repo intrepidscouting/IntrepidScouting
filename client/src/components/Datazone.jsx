@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFilter , faRefresh, faUser, faTrash, faPencil} from '@fortawesome/free-solid-svg-icons';
+import { faFilter , faRefresh, faUser, faTrash, faPencil, faFilePdf} from '@fortawesome/free-solid-svg-icons';
 import { apiService } from "../services/apiService.js";
 
 import './css/Datazone.css'
@@ -8,6 +8,7 @@ import './css/responsive/Datazone.css'
 import EvaluationForm from './EvaluationForm.jsx';
 import EvaluationView from './EvaluationView.jsx';
 import UpdateForm from './UpdateForm.jsx';
+import ExportFilteredData from './ExportFilteredData.jsx';
 import Flag from 'react-world-flags';
 
 const Datazone = ({scoutName}) => {
@@ -124,11 +125,13 @@ const Datazone = ({scoutName}) => {
       const [isVisible, setIsVisible] = useState(false); // State to control visibility
       const [isEvaView, setisEvaView] = useState(false); // State to control visibility
       const [isUpdateView, setIsUpdateView] = useState(false); // State to control visibility
+      const [isExport, setIsExport] = useState(false); // State to control visibility
       const [yearFilterErr, setyearFilterErr] = useState();
 
       const filterRef = useRef(null); // Reference to the filter section
       const evaluationRef = useRef(null);
       const updateRef = useRef(null);
+      const exportRef = useRef(null);
      
 
       // Function to toggle visibility when the button is clicked
@@ -146,6 +149,11 @@ const Datazone = ({scoutName}) => {
         setIsUpdateView((prev) => !prev);
       };
 
+      //Show exportForm for player
+      const showExport = () => {
+        setIsExport((prev) => !prev);
+      };
+
       useEffect(() => {
         const handleClickOutside = (event) => {
           if (filterRef.current && !filterRef.current.contains(event.target)) {
@@ -156,6 +164,9 @@ const Datazone = ({scoutName}) => {
           }
           if (updateRef.current && !updateRef.current.contains(event.target)) {
             setIsUpdateView(false);
+          }
+          if (exportRef.current && !exportRef.current.contains(event.target)) {
+            setIsExport(false);
           }
         };
     
@@ -238,6 +249,8 @@ const Datazone = ({scoutName}) => {
 
      {isUpdateView && (<div className="evalution-pop" ref={updateRef}><UpdateForm player={selectedPlayer}/></div>)}
 
+     {isExport && (<div className="evalution-pop" ref={exportRef}><ExportFilteredData players={filteredData} gotoDash={showExport}/></div>)}
+
     <div className="container">
 
       <div className="overhead">
@@ -261,6 +274,9 @@ const Datazone = ({scoutName}) => {
             </div>
             <div className="filterIcon" onClick={refreshFilter}>
               <FontAwesomeIcon icon={faRefresh}/>
+            </div>
+            <div className="filterIcon" onClick={() => {showExport();}}>
+              <FontAwesomeIcon icon={faFilePdf}/>
             </div>
 
             {/* Filter section */}

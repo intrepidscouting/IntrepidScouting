@@ -115,6 +115,14 @@ const EvaluationView = ({player}) => {
                 {isRate && renderEvaluation()} 
             </div>
             </div>
+
+            <div className="links">
+                <h3>Player Videos</h3>
+                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
+                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Manchester vrs Chelsea</a></p>
+                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
+                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
+            </div>
         </div>
     </div>
   )
