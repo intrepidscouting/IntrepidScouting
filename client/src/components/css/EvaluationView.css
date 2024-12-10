@@ -171,6 +171,14 @@
       white-space: normal; /* Allow text to wrap normally */
   }
 
+  .links{
+    padding: 16px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
   @media only screen and (max-width: 480px) {
     .view_wrapper{  
       display: flex;

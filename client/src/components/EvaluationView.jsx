@@ -116,12 +116,19 @@ const EvaluationView = ({player}) => {
             </div>
             </div>
 
-            <div className="links">
+            <div className="player-evaluation">
                 <h3>Player Videos</h3>
-                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
-                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Manchester vrs Chelsea</a></p>
-                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
-                <p className="link"><a href="https://chatgpt.com/c/674ee721-91d4-8003-9902-b7db3c6c80b2">Welcome</a></p>
+                <div className="border" style={{borderTop: "solid 1px var(--text)"}}></div>
+                <div className="video-link">
+                    <input type="text" placeholder="Link here"/>
+                    <input type="text" placeholder="Title"/>
+                </div>
+                <div className="links">
+                <p className="link"><a href="#">Link 1</a></p>
+                <p className="link"><a href="#">Link 2</a></p>
+                <p className="link"><a href="#">Link3</a></p>
+                <p className="link"><a href="#">Link 4</a></p>
+                </div>
             </div>
         </div>
     </div>
