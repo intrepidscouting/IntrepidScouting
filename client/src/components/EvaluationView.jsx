@@ -143,13 +143,13 @@ const EvaluationView = ({player}) => {
                     <p>{player.Region_scouted_in}</p>
                 </div>
                 <div className="personal_detail">
-                    <span>Coached by: </span>
-                    <p>{player.Coach}</p>
+                    <span>Agent: </span>
+                    <p>{player.Agent}</p>
                 </div>
-                <div className="personal_detail">
+                {/* <div className="personal_detail">
                     <span>Conatct Coach: </span>
                     <p>{player.Number_of_coach}</p>
-                </div>
+                </div> */}
                 <div className="personal_detail">
                     <span>Date Added: </span>
                     <p>{formatDate(player.Date_Added)}</p>
