@@ -25,7 +25,7 @@
 
 .personal_top > .img{
     border-radius: 50%;
-    border: solid 1px rgba(128, 128, 128, 0.24);
+    /* border: solid 1px rgba(128, 128, 128, 0.24); */
     object-fit:fill;
     height: 10rem;
     box-sizing: border-box;
