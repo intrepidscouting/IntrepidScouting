@@ -83,6 +83,13 @@ const createPlayers = async (req, res) => {
 const updatePlayers = async (req, res) => {
      const db_connect = dbo.getDb()
      const myquery = { _id: new ObjectId(req.params.id) }
+     if(req.file){
+          const ImgFile = req.file; // The uploaded file
+          const result = await cloudinary.uploader.upload(ImgFile.path, {
+               folder: 'uploads', // Optional: Specify folder in Cloudinary
+     });
+     }
+     
      const body = req.file ? {
           $set: {
                First_name: req.body.First_name,
@@ -104,7 +111,7 @@ const updatePlayers = async (req, res) => {
                Scouted_By: req.body.Scouted_By,
                Market_Value: req.body.Market_Value,
                Contract: req.body.Contract,
-               Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`,
+               Image: result.secure_url,
           }} : 
           {
                $set: {
