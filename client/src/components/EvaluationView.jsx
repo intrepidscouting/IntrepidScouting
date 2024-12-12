@@ -3,13 +3,19 @@ import './css/EvaluationView.css'
 import viteLogo from '/vite.svg';
 import { apiService } from "../services/apiService.js";
 import ExportStyledPDF from './ExportStyledPDF.jsx';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAdd } from '@fortawesome/free-solid-svg-icons';
+// import { json } from 'express';
 
 
 const EvaluationView = ({player}) => {
 
     const [ratings, setRatings] = useState([{}]);
+    const [linkList, setLinkList] = useState([]);
+    const [linkTemp, setLinkTemp] = useState([]);
     const [isRate, setIsRate] = useState(false);
     const [err, setErr] = useState();
+    const [link, setLink] = useState({url: '', title: ''});
 
     useEffect(() => {
         //Fetch all players from the database
@@ -17,16 +23,46 @@ const EvaluationView = ({player}) => {
             try {
               const query = `/evaluation/${player._id}/`;
               const data = await apiService.get(query);
+
               setRatings(data);
               setIsRate(true);
+
             } catch (e) {
               setErr("Failed to load evaluation: " + e);
               console.log(err);
             }
           };
-          
           fetchEvaluation();
+          
         }, []);
+
+        const fetchPlayerLinks = async () =>{
+            try{
+                const search = `/players/getlinks/${player._id}/`;
+                var linkSearch = await apiService.get(search);
+                setLinkList(linkSearch.Link);
+                // console.log(linkSearch.Link);
+            }catch (e){
+                console.log("Error loading links: " + e);
+            }
+        }
+
+        useEffect(()=>{
+            // const fetchPlayerLinks = async () =>{
+            //     try{
+            //         const search = `/players/getlinks/${player._id}/`;
+            //         var linkSearch = await apiService.get(search);
+            //         setLinkList(linkSearch.Link);
+            //         // console.log(linkSearch.Link);
+            //     }catch (e){
+            //         console.log("Error loading links: " + e);
+            //     }
+            // }
+
+            fetchPlayerLinks();
+        }, []);
+
+        
     
         const formatDate = (isoDate) => {
             const date = new Date(isoDate);
@@ -49,6 +85,39 @@ const EvaluationView = ({player}) => {
                 
             });
         }
+
+         // Handle changes for input fields
+        const handleInputChange = (e) => {
+            const { name, value } = e.target;
+            setLink((prevData) => ({
+            ...prevData,
+            [name]: value,
+            }));
+        };
+
+        const emptyLinkFields = () =>{
+            setLink({url: "", title: ""});
+        }
+
+        const addLink = async (e) =>{
+            e.preventDefault();
+            
+            try {
+                const jsonData = {
+                    url: link.url,
+                    title: link.title 
+                }
+                const response = await apiService.put(`/players/addlink/${player._id}`, jsonData, {
+                  headers: {
+                    'Content-Type': "application/json",
+                  },
+                });
+                fetchPlayerLinks();
+                emptyLinkFields();
+              } catch (error) {
+                console.error('Error adding link:', error);
+              }
+            }
 
   return (
     <div className="view_wrapper">
@@ -117,18 +186,30 @@ const EvaluationView = ({player}) => {
             </div>
 
             <div className="player-evaluation">
-                <h3>Player Videos</h3>
-                <div className="border" style={{borderTop: "solid 1px var(--text)"}}></div>
-                <div className="video-link">
-                    <input type="text" placeholder="Link here"/>
-                    <input type="text" placeholder="Title"/>
-                </div>
-                <div className="links">
-                <p className="link"><a href="#">Link 1</a></p>
-                <p className="link"><a href="#">Link 2</a></p>
-                <p className="link"><a href="#">Link3</a></p>
-                <p className="link"><a href="#">Link 4</a></p>
-                </div>
+                {/* <div className="border" style={{borderTop: "solid 1px var(--text)"}}></div> */}
+                <h4 className="links-header">Player Videos</h4>
+                {/* <div className="border" style={{borderTop: "solid 1px var(--text)"}}></div> */}
+                <form onSubmit={addLink} className="video-link">
+                    <div className="link-input">
+                        <input type="text" placeholder="Paste link here" value={link.url} name='url' onChange={handleInputChange} required className='xca'/>
+                        <input type="text" placeholder="Title" value={link.title} name='title' onChange={handleInputChange} required/>
+                    </div>
+                    <button type="submit" className='addLink'>
+                        <FontAwesomeIcon icon={faAdd}/>
+                    </button>
+                </form>
+                <ul className="linkList">
+                    {
+                        Object.entries(linkList).map(([index,i])=>{
+                            const formattedUrl = i.url.startsWith("http") ? i.url : `https://${i.url}`;
+                            return (
+                                <li key={(linkList.length + 5)} className="link">
+                                    <a href={formattedUrl} className="link" target="_blank" rel="noopener noreferrer">{i.title}</a>
+                                </li>
+                            )
+                        })
+                    }                    
+                </ul>
             </div>
         </div>
     </div>

@@ -21,7 +21,13 @@ const PlayerSchema = new mongoose.Schema({
     Date_Added: Date,
     Agent: String,
     Number_of_agent: String,
-    Market_Value: Number
+    Market_Value: Number,
+    Link: [
+        {
+            url: String,
+            title: String
+        }
+    ]
 })
 
 const PlayerModel = mongoose.model("Player", PlayerSchema) //creating a collection

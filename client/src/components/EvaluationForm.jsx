@@ -79,10 +79,6 @@ const EvaluationForm = ({newPlayerId}) => {
           ...ratings,
           Note: notes,
         });
-        
-        console.log(ratings);
-        console.log(Object.keys(ratings).length);
-        console.log("Notes ==== " + ratings.Note);
 
         if(Object.keys(ratings).length < 25){
           setFlag("Incomplete evaluation, check a value for each evalution parameter");
