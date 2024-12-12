@@ -4,6 +4,7 @@ const path = require('path')
 require('dotenv').config()
 const dbo = require("../db/conn.js")
 const ObjectId = require("mongodb").ObjectId
+const cloudinary = require('../middlewares/cloudinaryService.js')
 
 const getPlayers = async (req,res) => {
     const db_connect = dbo.getDb()
@@ -28,13 +29,16 @@ const createPlayers = async (req, res) => {
                return res.status(400).json({ message: 'No file uploaded' });
           }
 
+          const ImgFile = req.file; // The uploaded file
+          const result = await cloudinary.uploader.upload(ImgFile.path, {
+               folder: 'uploads', // Optional: Specify folder in Cloudinary
+          });
 
-          // Create a new image document
           const player = new PlayerModel({
                First_name, Last_name, Gender, Date_of_Birth, Height, Market_Value,
                Position, Nationality, NationalityISO, Club,  Number_of_agent, Agent,
                Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract,
-               Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`// store the image path
+               Image: result.secure_url// store the image path
           });
 
           await  db_connect.collection("player").insertOne(player) //req.body is request.body which means whatever the clients sends to the server must be shown in the console screen or browser
@@ -45,6 +49,36 @@ const createPlayers = async (req, res) => {
           res.status(500).json({message: error.message})
      }
 }
+
+// const createPlayers = async (req, res) => {
+//      const db_connect = dbo.getDb()
+//      try{
+//           const { First_name, Last_name, Gender, Date_of_Birth, Height,
+//                Position, Nationality, NationalityISO, Club, Market_Value,
+//                Preferred_Foot, Status, Coach, Number_of_agent, Agent,
+//                Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract} = req.body;
+
+//           if (!req.file) {
+//                return res.status(400).json({ message: 'No file uploaded' });
+//           }
+
+
+//           // Create a new image document
+//           const player = new PlayerModel({
+//                First_name, Last_name, Gender, Date_of_Birth, Height, Market_Value,
+//                Position, Nationality, NationalityISO, Club,  Number_of_agent, Agent,
+//                Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract,
+//                Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`// store the image path
+//           });
+
+//           await  db_connect.collection("player").insertOne(player) //req.body is request.body which means whatever the clients sends to the server must be shown in the console screen or browser
+//           res.status(200).json(player)
+     
+//      } catch (error) {
+//           console.log(error.message)
+//           res.status(500).json({message: error.message})
+//      }
+// }
 
 const updatePlayers = async (req, res) => {
      const db_connect = dbo.getDb()

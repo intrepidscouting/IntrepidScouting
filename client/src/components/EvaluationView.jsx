@@ -146,10 +146,10 @@ const EvaluationView = ({player}) => {
                     <span>Agent: </span>
                     <p>{player.Agent}</p>
                 </div>
-                {/* <div className="personal_detail">
-                    <span>Conatct Coach: </span>
-                    <p>{player.Number_of_coach}</p>
-                </div> */}
+                <div className="personal_detail">
+                    <span>Contract Length: </span>
+                    <p>{player.Contract == null ? "N/A" : `Until ${player.Contract}`}</p>
+                </div>
                 <div className="personal_detail">
                     <span>Date Added: </span>
                     <p>{formatDate(player.Date_Added)}</p>

@@ -85,11 +85,13 @@ const AddForm = ({scoutName}) => {
 
   const [playerId, setplayerId] = useState(); 
   const [countryCode, setCountryCode] = useState(''); 
-  const [imgName, setImgName] = useState(''); 
+  const [image, setImage] = useState(null);
   const [flagMessage, setFlagMessage] = useState(''); 
   const [isVisible, setIsVisible] = useState(false); 
   const [showDialog, setShowDialog] = useState(false); 
   const [loading, setLoading] = useState(false); 
+  const [uploadedImageUrl, setUploadedImageUrl] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   // Handle changes for input fields
   const handleInputChange = (e) => {
@@ -99,6 +101,7 @@ const AddForm = ({scoutName}) => {
       [name]: value,
     }));
   };
+  
 
   // Handle file input change
   const handleFileChange = (e) => {
@@ -107,6 +110,12 @@ const AddForm = ({scoutName}) => {
       image: e.target.files[0],
     }));
   };
+
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0];
+  //   setImage(file);
+  //   setPreview(URL.createObjectURL(file)); // Preview before upload
+  // };
 
   const handleDialog = () => {
     setShowDialog(true);
@@ -164,7 +173,7 @@ const AddForm = ({scoutName}) => {
 
       
       try {
-        
+        console.log(playerData.image);
         const response = await apiService.post('/players/add/', formData, {
           headers: {
             'Content-Type': "multipart/form-data",
@@ -204,6 +213,7 @@ const AddForm = ({scoutName}) => {
       {/* Form 1 */}
       <div className="form-step">
       {loading && <LoadingScreen/>}
+      {/* {preview && <img src={preview} alt="Preview" style={{ maxWidth: '200px' }} />} */}
       
         <h2>Player Entry Form</h2>
         <div className="registration-form-wrapper">
@@ -258,8 +268,8 @@ const AddForm = ({scoutName}) => {
               <option value="Trials">Trials</option>
               <option value="Leave">Leave</option>
             </select>
-            <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros" defaultValue={"N/A"}/>
-            <input type="number" name='contract' value={playerData.contract} onChange={handleInputChange} placeholder="Contract ends in " defaultValue={"N/A"}/>
+            <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros"/>
+            <input type="number" name='contract' value={playerData.contract} onChange={handleInputChange} placeholder="Contract ends in " />
             <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg" required/>
             <div className="btnsub">
               <button type="submit" >Add Player</button>
