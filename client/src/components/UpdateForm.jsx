@@ -70,7 +70,7 @@ const UpdateForm = ({player}) => {
     position: '', scoutedBy: '',
     foot: '', coachTel: '', region: '', agentName: '',
     coachName: '', nationalityISO: '', agentTel: '',
-    nationality:'', status: '', marketValue: 0,
+    nationality:'', status: '', marketValue: 0, contract: 0,
     image: '', // For storing the image file
   });
 
@@ -127,6 +127,7 @@ const UpdateForm = ({player}) => {
         region: player.Region_scouted_in || '',
         status: player.Status || '',
         height: player.Height || '',
+        contract: player.Contract || '',
         image:  player.Image || '', // For storing the image file
 
       });
@@ -185,6 +186,7 @@ const UpdateForm = ({player}) => {
     formData.append('Scouted_By', player.Scouted_By);
     formData.append('Height', playerData.height);
     formData.append('Market_Value', playerData.marketValue);
+    formData.append('Contract', playerData.contract);
 
       try {
         
@@ -277,6 +279,7 @@ const UpdateForm = ({player}) => {
               <option value="Leave">Leave</option>
             </select>
             <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros" defaultValue={"N/A"}/>
+            <input type="number" name='contract' value={playerData.contract} onChange={handleInputChange} placeholder="Contract ends in" defaultValue={"N/A"}/>
             <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg"/>
             <div className="btnsub">
               <button type="submit" >Update Player</button>

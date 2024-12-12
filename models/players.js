@@ -22,6 +22,7 @@ const PlayerSchema = new mongoose.Schema({
     Agent: String,
     Number_of_agent: String,
     Market_Value: Number,
+    Contract: Number,
     Link: [
         {
             url: String,

@@ -22,7 +22,7 @@ const createPlayers = async (req, res) => {
           const { First_name, Last_name, Gender, Date_of_Birth, Height,
                Position, Nationality, NationalityISO, Club, Market_Value,
                Preferred_Foot, Status, Coach, Number_of_agent, Agent,
-               Number_of_coach, Region_scouted_in, Scouted_By, Date_Added } = req.body;
+               Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract} = req.body;
 
           if (!req.file) {
                return res.status(400).json({ message: 'No file uploaded' });
@@ -33,7 +33,7 @@ const createPlayers = async (req, res) => {
           const player = new PlayerModel({
                First_name, Last_name, Gender, Date_of_Birth, Height, Market_Value,
                Position, Nationality, NationalityISO, Club,  Number_of_agent, Agent,
-               Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added,
+               Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract,
                Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`// store the image path
           });
 
@@ -69,6 +69,7 @@ const updatePlayers = async (req, res) => {
                Region_scouted_in: req.body.Region_scouted_in,
                Scouted_By: req.body.Scouted_By,
                Market_Value: req.body.Market_Value,
+               Contract: req.body.Contract,
                Image: `${process.env.REACT_HOSTNAME}/${req.file.path}`,
           }} : 
           {
@@ -91,6 +92,7 @@ const updatePlayers = async (req, res) => {
                     Region_scouted_in: req.body.Region_scouted_in,
                     Scouted_By: req.body.Scouted_By,
                     Market_Value: req.body.Market_Value,
+                    Contract: req.body.Contract,
                }}
 
      try{
@@ -167,10 +169,10 @@ const deleteLink = async (req, res) => {
 const getLinks = async (req,res) => {
      const db_connect = dbo.getDb()
      try{
-          const { Player_id } = req.params
+          const myquery = { _id: new ObjectId(req.params.id) }
          
           // Find players that belong toc the specified team and populate the team reference
-          const search = await db_connect.collection("player").findOne({ Player_id: Player_id})
+          const search = await db_connect.collection("player").findOne(myquery)
 
           if (search.length === 0) {
                return res.status(404).json({ message: 'No player found' });

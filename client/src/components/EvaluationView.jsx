@@ -5,17 +5,26 @@ import { apiService } from "../services/apiService.js";
 import ExportStyledPDF from './ExportStyledPDF.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd } from '@fortawesome/free-solid-svg-icons';
-// import { json } from 'express';
 
 
 const EvaluationView = ({player}) => {
 
     const [ratings, setRatings] = useState([{}]);
     const [linkList, setLinkList] = useState([]);
-    const [linkTemp, setLinkTemp] = useState([]);
     const [isRate, setIsRate] = useState(false);
     const [err, setErr] = useState();
     const [link, setLink] = useState({url: '', title: ''});
+
+    const fetchPlayerLinks = async () =>{
+        try{
+            const search = `/players/getlinks/${player._id}/`;
+            var linkSearch = await apiService.get(search);
+            setLinkList(linkSearch.Link);
+            console.log(linkList);   
+        }catch (e){
+            console.log("Error loading links: " + e);
+        }
+    }  
 
     useEffect(() => {
         //Fetch all players from the database
@@ -23,46 +32,18 @@ const EvaluationView = ({player}) => {
             try {
               const query = `/evaluation/${player._id}/`;
               const data = await apiService.get(query);
-
               setRatings(data);
               setIsRate(true);
-
             } catch (e) {
               setErr("Failed to load evaluation: " + e);
               console.log(err);
             }
           };
           fetchEvaluation();
-          
+          fetchPlayerLinks();
         }, []);
 
-        const fetchPlayerLinks = async () =>{
-            try{
-                const search = `/players/getlinks/${player._id}/`;
-                var linkSearch = await apiService.get(search);
-                setLinkList(linkSearch.Link);
-                // console.log(linkSearch.Link);
-            }catch (e){
-                console.log("Error loading links: " + e);
-            }
-        }
-
-        useEffect(()=>{
-            // const fetchPlayerLinks = async () =>{
-            //     try{
-            //         const search = `/players/getlinks/${player._id}/`;
-            //         var linkSearch = await apiService.get(search);
-            //         setLinkList(linkSearch.Link);
-            //         // console.log(linkSearch.Link);
-            //     }catch (e){
-            //         console.log("Error loading links: " + e);
-            //     }
-            // }
-
-            fetchPlayerLinks();
-        }, []);
-
-        
+              
     
         const formatDate = (isoDate) => {
             const date = new Date(isoDate);

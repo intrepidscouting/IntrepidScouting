@@ -74,7 +74,7 @@ const AddForm = ({scoutName}) => {
     gender: '', club: '', 
     position: '', scoutedBy: '', date_Added: '',
     foot: '', coachTel: '', region: '',  coachName: '', marketValue: '',
-    agentName: '', agentTel: '',
+    agentName: '', agentTel: '', contract: '',
     image: null, // For storing the image file
   });
 
@@ -159,6 +159,7 @@ const AddForm = ({scoutName}) => {
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', scoutName);
     formData.append('Market_Value', playerData.marketValue);
+    formData.append('Contract', playerData.contract);
     formData.append('Date_Added', getTodayDate());
 
       
@@ -258,6 +259,7 @@ const AddForm = ({scoutName}) => {
               <option value="Leave">Leave</option>
             </select>
             <input type="number" name='marketValue' value={playerData.marketValue} onChange={handleInputChange} placeholder="Market value in euros" defaultValue={"N/A"}/>
+            <input type="number" name='contract' value={playerData.contract} onChange={handleInputChange} placeholder="Contract ends in " defaultValue={"N/A"}/>
             <input type="file" id="image" name="image" onChange={handleFileChange}  accept="image/png , image/jpeg, image/jpg" required/>
             <div className="btnsub">
               <button type="submit" >Add Player</button>

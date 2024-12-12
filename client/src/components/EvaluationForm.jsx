@@ -68,9 +68,7 @@ const EvaluationForm = ({newPlayerId}) => {
         setTimeout(() => {
           setShowDialog(false);
         }, 9000);
-      }
-
-      
+      } 
     
       const handleSubmit = async (e) => {
         e.preventDefault();
