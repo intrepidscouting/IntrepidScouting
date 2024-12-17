@@ -83,14 +83,13 @@ const createPlayers = async (req, res) => {
 const updatePlayers = async (req, res) => {
      const db_connect = dbo.getDb()
      const myquery = { _id: new ObjectId(req.params.id) }
+     let body = {}
      if(req.file){
           const ImgFile = req.file; // The uploaded file
           const result = await cloudinary.uploader.upload(ImgFile.path, {
                folder: 'uploads', // Optional: Specify folder in Cloudinary
      });
-     }
-     
-     const body = req.file ? {
+     body =  {
           $set: {
                First_name: req.body.First_name,
                Last_name: req.body.Last_name,
@@ -112,8 +111,9 @@ const updatePlayers = async (req, res) => {
                Market_Value: req.body.Market_Value,
                Contract: req.body.Contract,
                Image: result.secure_url,
-          }} : 
-          {
+          }}
+     }else{
+          body = {
                $set: {
                     First_name: req.body.First_name,
                     Last_name: req.body.Last_name,
@@ -134,10 +134,57 @@ const updatePlayers = async (req, res) => {
                     Scouted_By: req.body.Scouted_By,
                     Market_Value: req.body.Market_Value,
                     Contract: req.body.Contract,
-               }}
+               }
+          }
+     }
+     
+     // const body = req.file ? {
+     //      $set: {
+     //           First_name: req.body.First_name,
+     //           Last_name: req.body.Last_name,
+     //           Gender: req.body.Gender,
+     //           Date_of_Birth: req.body.Date_of_Birth,
+     //           Position: req.body.Position,
+     //           Height: req.body.Height,
+     //           Nationality: req.body.Nationality,
+     //           NationalityISO: req.body.NationalityISO,
+     //           Club: req.body.Club,
+     //           Preferred_Foot: req.body.Preferred_Foot,
+     //           Status: req.body.Status,
+     //           Coach: req.body.Coach,
+     //           Agent: req.body.Agent,
+     //           Number_of_coach: req.body.Number_of_coach,
+     //           Number_of_agent: req.body.Number_of_agent,
+     //           Region_scouted_in: req.body.Region_scouted_in,
+     //           Scouted_By: req.body.Scouted_By,
+     //           Market_Value: req.body.Market_Value,
+     //           Contract: req.body.Contract,
+     //           Image: result.secure_url,
+     //      }} : 
+     //      {
+     //           $set: {
+     //                First_name: req.body.First_name,
+     //                Last_name: req.body.Last_name,
+     //                Gender: req.body.Gender,
+     //                Date_of_Birth: req.body.Date_of_Birth,
+     //                Position: req.body.Position,
+     //                Height: req.body.Height,
+     //                Nationality: req.body.Nationality,
+     //                NationalityISO: req.body.NationalityISO,
+     //                Club: req.body.Club,
+     //                Preferred_Foot: req.body.Preferred_Foot,
+     //                Status: req.body.Status,
+     //                Agent: req.body.Agent,
+     //                Coach: req.body.Coach,
+     //                Number_of_coach: req.body.Number_of_coach,
+     //                Number_of_agent: req.body.Number_of_agent,
+     //                Region_scouted_in: req.body.Region_scouted_in,
+     //                Scouted_By: req.body.Scouted_By,
+     //                Market_Value: req.body.Market_Value,
+     //                Contract: req.body.Contract,
+     //           }}
 
      try{
-          const {id} = req.params
           const player = await  db_connect.collection("player").updateOne(myquery, body)
           
           //if we cant find any player in database

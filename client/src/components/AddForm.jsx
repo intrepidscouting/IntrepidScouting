@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import './css/AddForm.css'
 import './css/responsive/AddForm.css'
 import './css/responsive/EvaluationForm.css'
@@ -111,11 +111,13 @@ const AddForm = ({scoutName}) => {
     }));
   };
 
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0];
-  //   setImage(file);
-  //   setPreview(URL.createObjectURL(file)); // Preview before upload
-  // };
+  const emptyFieldString = (field) => {
+      return field.length === 0 ? "N/A" : field;
+  }
+
+  const emptyFieldNumber = (field) => {
+      return field.length === 0 ? 0 : field;
+  }
 
   const handleDialog = () => {
     setShowDialog(true);
@@ -123,21 +125,27 @@ const AddForm = ({scoutName}) => {
     // Automatically close the dialog after 2 seconds
     setTimeout(() => {
       setShowDialog(false);
-    }, 2000);
+    }, 50000);
   }
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log("status " + playerData.status);
+    console.log("gender " + playerData.gender.length);
+    console.log("nationality " + playerData.nationality);
+    console.log("Foot " + playerData.foot.length);
+    console.log("position " + playerData.position.length);
+
     if (
-      playerData.gender.length === 0 || playerData.status.length === 0 || playerData.nationality.length === 0
-      || playerData.foot.length === 0 || playerData.position.length === 0
+      playerData.gender.length === 0 || playerData.status == undefined || playerData.nationality == undefined
+      || playerData.foot.length === 0 || playerData.position.length == 0
     ) {
-      setFlagMessage("Kindly enter all the details of the player");
       setIsVisible(true);
-      console.log("empty forms");
       setLoading(false);
+      handleDialog();
+      console.log("empty forms");
     } else {
       const countrySearch = africanCountries.find((africanCountry) => africanCountry.name === playerData.nationality);
     
@@ -158,20 +166,18 @@ const AddForm = ({scoutName}) => {
     formData.append('Preferred_Foot', playerData.foot);
     formData.append('Region_scouted_in', playerData.region);
     formData.append('Club', playerData.club);
-    formData.append('Number_of_coach', playerData.coachTel);
-    formData.append('Coach', playerData.coachName);
-    formData.append('Number_of_agent', playerData.agentTel);
-    formData.append('Agent', playerData.agentName);
+    formData.append('Number_of_coach', emptyFieldString(playerData.coachTel));
+    formData.append('Coach', emptyFieldString(playerData.coachName));
+    formData.append('Number_of_agent', emptyFieldString(playerData.agentTel));
+    formData.append('Agent', emptyFieldString(playerData.agentName));
     formData.append('Image', playerData.image);
     formData.append('Nationality', playerData.nationality);
     formData.append('NationalityISO', countrySearch.code);
     formData.append('Status', playerData.status);
     formData.append('Scouted_By', scoutName);
-    formData.append('Market_Value', playerData.marketValue);
+    formData.append('Market_Value', emptyFieldNumber(playerData.marketValue));
     formData.append('Contract', playerData.contract);
-    formData.append('Date_Added', getTodayDate());
-
-      
+    formData.append('Date_Added', getTodayDate());      
       try {
         console.log(playerData.image);
         const response = await apiService.post('/players/add/', formData, {
@@ -208,12 +214,20 @@ const AddForm = ({scoutName}) => {
 
   return(
     <div className="add-form-container">
-      
+      {showDialog && (
+        <div className="addDialog">
+          <div className="dialogContent">
+            <h3>Some Fields must be filled</h3>
+            <p>[Nationality, Status, Gender, Preferred Foot, Position]</p>
+            <button onClick={() => setShowDialog(false)}>Close</button>
+          </div>
+        </div>
+      )}
     <div className="form-wrapper" style={{ transform: `translateX(-${step * 50}%)`}}>
       {/* Form 1 */}
+      
       <div className="form-step">
       {loading && <LoadingScreen/>}
-      {/* {preview && <img src={preview} alt="Preview" style={{ maxWidth: '200px' }} />} */}
       
         <h2>Player Entry Form</h2>
         <div className="registration-form-wrapper">
@@ -221,7 +235,7 @@ const AddForm = ({scoutName}) => {
           <input type="text" name='firstname' value={playerData.firstname} onChange={handleInputChange} placeholder="Firstname of player" required/>
           <input type="text" name='lastname' value={playerData.lastname} onChange={handleInputChange} placeholder="Lastname of player" required/>
             <select name="gender" id="gender" value={playerData.gender} onChange={handleInputChange} defaultValue="Male">
-              <option value="">-- Select gender --</option>
+              <option value=" ">-- Select gender --</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
@@ -229,7 +243,7 @@ const AddForm = ({scoutName}) => {
             <input type="text" name='height' value={playerData.height} onChange={handleInputChange} placeholder="Height in cm" defaultValue={"N/A"}/>
 
             <select  name="nationality" id="nationality" value={playerData.nationality} onChange={handleInputChange}>
-            <option value="">--Select Nationality --</option>
+            <option value=" ">--Select Nationality --</option>
             {africanCountries.map((country, index) => (
               <option key={country.code} value={country.name}>
                 {country.name}
@@ -238,7 +252,7 @@ const AddForm = ({scoutName}) => {
           </select>
 
             <select name="position" id="position" value={playerData.position} onChange={handleInputChange}>
-              <option value="">-- Select position --</option>
+              <option value="qaa12">-- Select position --</option>
               <option value="Center Foward">Center Foward</option>
               <option value="Right Winger">Right Winger</option>
               <option value="Left Winger">Left Winger</option>
@@ -251,7 +265,7 @@ const AddForm = ({scoutName}) => {
               <option value="Goalkeeper">Goalkeeper</option>
             </select>
             <select name="foot" id="foot" value={playerData.foot} onChange={handleInputChange} defaultValue={"Left"}>
-              <option value="">-- Select Preferred Foot --</option>
+              <option value="qaa12">-- Select Preferred Foot --</option>
               <option value="Left">Left</option>
               <option value="Right">Right</option>
             </select>
@@ -261,8 +275,8 @@ const AddForm = ({scoutName}) => {
             <input type="tel" name='coachTel' value= {playerData.coachTel} onChange={handleInputChange} placeholder="Coach Tel:" defaultValue={"N/A"}/>
             <input type="text" name='agentName' value={playerData.agentName} onChange={handleInputChange} placeholder="Agent" defaultValue={"N/A"}/>
             <input type="tel" name='agentTel' value= {playerData.agentTel} onChange={handleInputChange} placeholder="Agent Tel:" defaultValue={"N/A"}/>
-            <select name="status" id="status" value={playerData.status} onChange={handleInputChange}>
-              <option value="">-- Select Status --</option>
+            <select name="status" id="status" value={playerData.status} onChange={handleInputChange} defaultValue={"N/A"}>
+              <option value="q1aaz">-- Select Status --</option>
               <option value="Signed" defaultValue>Signed</option>
               <option value="Follow">Follow</option>
               <option value="Trials">Trials</option>
