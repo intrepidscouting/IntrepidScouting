@@ -325,6 +325,9 @@ const Datazone = ({scoutName}) => {
             Status 
           </th>
           <th >
+            Rating 
+          </th>
+          <th >
             {/* Delete icon */}
           </th>
           <th >
@@ -367,11 +370,12 @@ const Datazone = ({scoutName}) => {
             >
               <div className='tooltip'>
                 <div className={`${player.Status.toLowerCase()}`}></div>
-                <span class="tooltiptext">{`${player.Status}`}</span>
+                <span className="tooltiptext">{`${player.Status}`}</span>
               </div>
               
               
             </td>
+            <td>{player.Average}</td>
             <td className='trash-td'  onClick={(event) => deletePlayer(event, player._id)}>
               <div className='trash-icon' title='delete'>
                 <FontAwesomeIcon icon={faTrash}/>

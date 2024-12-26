@@ -23,7 +23,7 @@ const createPlayers = async (req, res) => {
           const { First_name, Last_name, Gender, Date_of_Birth, Height,
                Position, Nationality, NationalityISO, Club, Market_Value,
                Preferred_Foot, Status, Coach, Number_of_agent, Agent,
-               Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract} = req.body;
+               Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract, Average} = req.body;
 
           if (!req.file) {
                return res.status(400).json({ message: 'No file uploaded' });
@@ -37,7 +37,7 @@ const createPlayers = async (req, res) => {
           const player = new PlayerModel({
                First_name, Last_name, Gender, Date_of_Birth, Height, Market_Value,
                Position, Nationality, NationalityISO, Club,  Number_of_agent, Agent,
-               Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract,
+               Preferred_Foot, Status, Coach, Number_of_coach, Region_scouted_in, Scouted_By, Date_Added, Contract, Average,
                Image: result.secure_url// store the image path
           });
 
@@ -138,51 +138,6 @@ const updatePlayers = async (req, res) => {
           }
      }
      
-     // const body = req.file ? {
-     //      $set: {
-     //           First_name: req.body.First_name,
-     //           Last_name: req.body.Last_name,
-     //           Gender: req.body.Gender,
-     //           Date_of_Birth: req.body.Date_of_Birth,
-     //           Position: req.body.Position,
-     //           Height: req.body.Height,
-     //           Nationality: req.body.Nationality,
-     //           NationalityISO: req.body.NationalityISO,
-     //           Club: req.body.Club,
-     //           Preferred_Foot: req.body.Preferred_Foot,
-     //           Status: req.body.Status,
-     //           Coach: req.body.Coach,
-     //           Agent: req.body.Agent,
-     //           Number_of_coach: req.body.Number_of_coach,
-     //           Number_of_agent: req.body.Number_of_agent,
-     //           Region_scouted_in: req.body.Region_scouted_in,
-     //           Scouted_By: req.body.Scouted_By,
-     //           Market_Value: req.body.Market_Value,
-     //           Contract: req.body.Contract,
-     //           Image: result.secure_url,
-     //      }} : 
-     //      {
-     //           $set: {
-     //                First_name: req.body.First_name,
-     //                Last_name: req.body.Last_name,
-     //                Gender: req.body.Gender,
-     //                Date_of_Birth: req.body.Date_of_Birth,
-     //                Position: req.body.Position,
-     //                Height: req.body.Height,
-     //                Nationality: req.body.Nationality,
-     //                NationalityISO: req.body.NationalityISO,
-     //                Club: req.body.Club,
-     //                Preferred_Foot: req.body.Preferred_Foot,
-     //                Status: req.body.Status,
-     //                Agent: req.body.Agent,
-     //                Coach: req.body.Coach,
-     //                Number_of_coach: req.body.Number_of_coach,
-     //                Number_of_agent: req.body.Number_of_agent,
-     //                Region_scouted_in: req.body.Region_scouted_in,
-     //                Scouted_By: req.body.Scouted_By,
-     //                Market_Value: req.body.Market_Value,
-     //                Contract: req.body.Contract,
-     //           }}
 
      try{
           const player = await  db_connect.collection("player").updateOne(myquery, body)
@@ -205,6 +160,9 @@ const deletePlayers = async (req, res) => {
           if (!player) {
                return res.status(404).json({message: "cannot find any player with ID ${id}"})
           }
+          const result = await cloudinary.api.delete_resources([`${player.Image}`], 
+               { type: 'upload', resource_type: 'image' })
+             .then(console.log("del successful"))
           res.status(200).json(player)
      }
      catch(error){
@@ -274,6 +232,28 @@ const getLinks = async (req,res) => {
    }
 }
 
+const addScore = async (req, res) => {
+     const db_connect = dbo.getDb()
+     const myquery = { _id: new ObjectId(req.params.id) }
+     
+     const body =  {
+          $set: {
+               Average: req.body.Average,
+          }}
+     
+     try{
+          const player = await  db_connect.collection("player").updateOne(myquery, body)
+          
+          //if we cant find any player in database
+          if(!player){
+               return res.status(404).json({message: "cannot find any player with ID ${id}"})
+          }
+          res.status(200).json(player)
+     } catch(error){
+          res.status(500).json({message: error.message})
+     }
+}
+
 module.exports = {
      getPlayers,
      createPlayers,
@@ -281,5 +261,6 @@ module.exports = {
      deletePlayers,
      addLink,
      deleteLink,
-     getLinks
+     getLinks,
+     addScore
 }

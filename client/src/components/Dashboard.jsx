@@ -15,15 +15,13 @@ const Dashboard = () => {
   const location = useLocation();
   const [loginId, setLoginId] = useState(); 
   const [scoutName, setScoutName] = useState(); 
-  // const scoutName = location.state?._scoutName; // Access the state passed via navigate
-  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [selectedComponent, setSelectedComponent] = useState('A');
 
   useEffect(() => {
     // const location = useLocation();
-    setLoginId(location.state?.message);
-    setScoutName(location.state?._scoutName); // Access the state passed via navigate
+    setLoginId(localStorage.getItem('_id'));
+    setScoutName(localStorage.getItem('name')); // Access the state passed via navigate
 
     const verifyToken = async () => {
         const token = localStorage.getItem('jwtToken');
@@ -40,7 +38,7 @@ const Dashboard = () => {
     };
 
       verifyToken();
-  }, [navigate]);
+  }, []);
 
   useEffect(() => {
     let timer;
@@ -48,6 +46,8 @@ const Dashboard = () => {
         clearTimeout(timer);
         timer = setTimeout(() => {
             localStorage.removeItem('jwtToken'); // Clear token
+            localStorage.removeItem("_id");  // Remove _id token
+            localStorage.removeItem("name");  // Remove name token
             window.location.href = '/'; // Redirect to homepage
         }, 5 * 60 * 1000); // 5 minutes inactivity
     };
@@ -85,6 +85,8 @@ const Dashboard = () => {
   const handleLogout = () => {
     
     localStorage.removeItem("jwtToken");  // Remove JWT token
+    localStorage.removeItem("_id");  // Remove _id token
+    localStorage.removeItem("name");  // Remove name token
     navigate("/");  // Redirect back to login page
   };
 

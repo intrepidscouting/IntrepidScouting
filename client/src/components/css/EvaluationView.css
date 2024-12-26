@@ -11,16 +11,50 @@
     flex: 0.4;
     display: flex;
     flex-direction: column;
-    border-radius: 15%;
+    border-radius: 5%;
     padding: 1rem 2rem;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .personal_top {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+.personal_top > .t_average > .average_star{
+  font-size: 1.5rem;
+  color: white;
+}
+
+.personal_top > .t_average{
+  position: absolute;
+  right: -0.5rem;
+  top: -0.7rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: 0px 20px;
+}
+
+.personal_top > .t_average.low{
+  background-color: red;
+}
+
+.personal_top > .t_average.mid{
+  background-color: rgb(173, 173, 3);
+}
+
+.personal_top > .t_average.high{
+  background-color: green;
+}
+
+.personal_top > .t_average > h2{
+  font-size: 2rem;
+  color: white;
 }
 
 .personal_top > .img{
@@ -150,6 +184,24 @@
     font-size: 16px;
     color: #555;
     width: fit-content;
+  }
+
+  .noteView > .noteView_Title{
+    display: flex;
+    gap: 1rem;
+  }
+
+  .noteView > .noteView_Title > .average{
+    display: flex;
+    gap: 0.2rem;
+    color: #555555b0;
+    align-items: center;
+  }
+  .noteView > .noteView_Title > .average > span{
+    font-size: 1.1rem
+  }
+  .noteView > .noteView_Title > .average > .star{
+    font-size: 0.8rem
   }
 
   /* .noteValue{

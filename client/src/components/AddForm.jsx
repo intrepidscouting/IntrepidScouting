@@ -132,11 +132,6 @@ const AddForm = ({scoutName}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("status " + playerData.status);
-    console.log("gender " + playerData.gender.length);
-    console.log("nationality " + playerData.nationality);
-    console.log("Foot " + playerData.foot.length);
-    console.log("position " + playerData.position.length);
 
     if (
       playerData.gender.length === 0 || playerData.status == undefined || playerData.nationality == undefined
@@ -179,7 +174,7 @@ const AddForm = ({scoutName}) => {
     formData.append('Contract', playerData.contract);
     formData.append('Date_Added', getTodayDate());      
       try {
-        console.log(playerData.image);
+        
         const response = await apiService.post('/players/add/', formData, {
           headers: {
             'Content-Type': "multipart/form-data",

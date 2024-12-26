@@ -14,7 +14,12 @@ const ExportStyledPDF = ({player, evaluation}) => {
     };
 
     const handleEmptyFields = (field) =>{
-      return field.length === 0 ? "N/A" : field;
+      if(field.length === 0 || field == "undefined"){
+        return "N/A";
+      }else{
+        return field;
+      }
+      // return field.length === 0 || field == undefined ? "N/A" : field;
     }
     
     // Adding an Image (e.g., logo or profile picture)
@@ -60,18 +65,21 @@ const ExportStyledPDF = ({player, evaluation}) => {
       doc.text(`Preferred Foot: ${player.Preferred_Foot}`, 20, 130);
       doc.text(`Agent: ${handleEmptyFields(player.Agent)}`, 20, 140);
       doc.text(`Region Scouted In: ${handleEmptyFields(player.Region_scouted_in)}`, 20, 150);
-      doc.text(`Contract Duration:`, 20, 160);
+      doc.text(`Contract Duration:  ${handleEmptyFields(player.Contract)}`, 20, 160);
 
       
       doc.text(`Club: ${player.Club}`, 110, 90);
-      doc.text(`Height: ${handleEmptyFields(player.Height)}cm`, 110, 100);
+      doc.text(`Height: ${handleEmptyFields(player.Height)} cm`, 110, 100);
       doc.text(`Position: ${player.Position}`, 110, 110);
       doc.text(`Coach Tel: ${handleEmptyFields(player.Number_of_coach)}`, 110, 120);
       doc.text(`Scouted by: ${player.Scouted_By}`, 110, 130);
       doc.text(`Agent Contact: ${handleEmptyFields(player.Number_of_agent)}`, 110, 140);
       doc.text(`Market Value: ${handleEmptyFields(player.Market_Value)}`, 110, 150);
+      doc.text(`Average: ${handleEmptyFields(player.Average)}`, 110, 160);
       
-  
+      
+      console.log("COntract " + player.Market_Value);
+
       // Evaluation Table Title
       const evaluationStartY = 175;
       doc.setFontSize(18);
@@ -90,6 +98,15 @@ const ExportStyledPDF = ({player, evaluation}) => {
 
       // Loop through each key-value pair in the JSON object
       Object.keys(evaluation).forEach(key => {
+
+        if(
+          key === "IP_Score" || key === "Average" || key ==="OOP_Score" 
+          || key === "PA_Score" || key === "MAP_Score" || key === "ATI_Score" || key === "Impressions_Score"
+        ){
+          return;
+        }
+
+
         // Skip the fields you want to exclude (like the email)
         if (key === 'title' || key === 'email') return;
 

@@ -19,6 +19,7 @@
     /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
     overflow-y: scroll;
     z-index: -1;
+    
   }
 
   /* xxxxxxxxxxxxxxxxxx */
@@ -79,14 +80,14 @@
 .dialogStyles{
   position: absolute;
   top: 0;
-  left: 0;
+  left: 50%;
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 99999;
+  z-index: 9999999;
   height: 100vh;
 }
 
@@ -96,4 +97,9 @@
   border-radius: 8px;
   text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.question_header > select{
+  margin-left: 1.2rem;
+  font-size: 0.8rem;
 }

@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg';
 import { apiService } from "../services/apiService.js";
 import ExportStyledPDF from './ExportStyledPDF.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faStar } from '@fortawesome/free-solid-svg-icons';
 
 
 const EvaluationView = ({player}) => {
@@ -53,7 +53,7 @@ const EvaluationView = ({player}) => {
         const renderEvaluation = () => {
             return Object.entries(ratings).map(([key, value]) => {
                 const header = key.replace(/_/g, " ");
-                if(!(key.toUpperCase() === "PLAYER_ID" || key.toUpperCase() === "_ID" || key.toUpperCase() === "NOTE")){
+                if(!(key.toUpperCase() === "PLAYER_ID" || key.toUpperCase() === "_ID" || key.toUpperCase() === "NOTE" )){
                     return (
                         <div key={key} className="noteView">
                             <span>{header}</span>
@@ -100,10 +100,26 @@ const EvaluationView = ({player}) => {
               }
             }
 
+        const averageLevel = (average) => {
+            if(Number(average) < 2){
+                return "low";
+            }
+            if(Number(average) > 2 && Number(average) < 3.6){
+                return "mid";
+            }
+            if(Number(average) > 3.5){
+                return "high";
+            }
+        }
+
   return (
     <div className="view_wrapper">
         <div className="view_personal">
             <div className="personal_top">
+                <div className={`t_average ${averageLevel(ratings.Average)}`}>
+                    <FontAwesomeIcon icon={faStar} className={`average_star`}/>
+                    <h2>{ratings.Average}</h2>
+                </div>
                 <div className="img">
                     <img src={player.Image} alt="" />
                 </div>
@@ -162,7 +178,84 @@ const EvaluationView = ({player}) => {
             <div className="player-evaluation">
             <h3>Evaluation Metrics</h3>
             <div  className="evaluation-metrics">
-                {isRate && renderEvaluation()} 
+                {/* {isRate && renderEvaluation()}  */}
+
+                <div key="In_Posession" className="noteView">
+                    <div className="noteView_Title">
+                            <span>In Posession</span>
+                            <div className="average">
+                                <FontAwesomeIcon icon={faStar} className='star'/>
+                                <span>{ratings.IP_Score}</span>
+                            </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.In_Posession}
+                    </div>
+                </div>
+                <div key="Out_of_Posession" className="noteView">
+                    <div className="noteView_Title">
+                        <span>Out of Posession</span>
+                        <div className="average">
+                            <FontAwesomeIcon icon={faStar} className='star'/>
+                            <span>{ratings.OOP_Score}</span>
+                        </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.Out_of_Posession}
+                    </div>
+                </div>
+                <div key="Physical_Atttributes" className="noteView">
+                    <div className="noteView_Title">
+                        <span>Physical Atttributes</span>
+                        <div className="average">
+                            <FontAwesomeIcon icon={faStar} className='star'/>
+                            <span>{ratings.ATI_Score}</span>
+                        </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.Physical_Atttributes}
+                    </div>
+                </div>
+
+                <div key="Mental_Attributes" className="noteView">
+                    <div className="noteView_Title">
+                        <span>Mental Attributes and Personality</span>
+                        <div className="average">
+                        <FontAwesomeIcon icon={faStar} className='star'/>
+                        <span>{ratings.MAP_Score}</span>
+                        </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.Mental_Attributes}
+                    </div>
+                </div>
+                <div key="Areas_to_Improve" className="noteView">
+                    <div className="noteView_Title">
+                        <span>Areas to Imporove</span>
+                        <div className="average">
+                        <FontAwesomeIcon icon={faStar} className='star'/>
+                        <span>{ratings.ATI_Score}</span>
+                        </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.Areas_to_Improve}
+                    </div>
+                </div>
+                <div key="Impressions" className="noteView">
+                    <div className="noteView_Title">
+                        <span>Impressions</span>
+                        <div className="average">
+                        <FontAwesomeIcon icon={faStar} className='star'/>
+                        <span>{ratings.Impressions_Score}</span>
+                        </div>
+                    </div>
+                    <div className="noteValue">
+                        {ratings.Impressions}
+                    </div>
+                </div>
+
+
+
             </div>
             </div>
 
