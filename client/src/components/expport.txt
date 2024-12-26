@@ -1,0 +1,3 @@
+.delete_resources(['cld-sample-5'], 
+    { type: 'upload', resource_type: 'image' })
+  .then(console.log)
