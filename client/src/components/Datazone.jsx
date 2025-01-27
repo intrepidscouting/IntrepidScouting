@@ -328,7 +328,7 @@ const Datazone = ({scoutName}) => {
             Nationality 
           </th>
           <th>
-            DOB
+            DOB (Age)
           </th>
           <th>
             Position
