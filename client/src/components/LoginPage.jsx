@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { apiService } from "../services/apiService.js";
 import { useNavigate } from "react-router-dom";  // React Router for navigation
 import './css/LoginPage.css'
-import logo from '/African Talent.png';
+import logo from '/Intrepid.png';
 import './css/responsive/LoginPage.css'
 import LoadingScreen from "./Loading.jsx";
 
