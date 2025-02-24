@@ -100,7 +100,7 @@ const Dashboard = () => {
       <div className="dash holder">
         <div className='sidebar'>
           <div className="logo">
-              <img src="/African Talent.png" alt="" />
+              <img src="/Intrepid.png" alt="" />
               <h4>Intrepid Scouting</h4>
           </div>
           <ul>
