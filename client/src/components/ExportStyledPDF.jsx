@@ -3,7 +3,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFileExport} from '@fortawesome/free-solid-svg-icons';
-import logo from '/African Talent.png';
+import logo from '/Intrepid.png';
 
 const ExportStyledPDF = ({player, evaluation}) => {
     
